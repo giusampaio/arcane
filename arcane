@@ -1,0 +1,10 @@
+#!/usr/bin/env php
+<?php
+
+require_once 'core/vendor/autoload.php';
+
+use Arcane\Console\Facades\Fantasy;
+
+$terminal = new Fantasy();
+
+$terminal->input($argv);

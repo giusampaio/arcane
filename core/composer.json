@@ -1,0 +1,30 @@
+{
+    "name": "arcane/microframework",
+    "description": "Arcane, The MicroFramework PHP.",
+    "keywords": ["framework", "micro", "Arcane"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Giuliano Sampaio",
+            "email": "sampaio.giuliano@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "illuminate/database": "*",
+        "mustache/mustache": "~2.5"
+    },
+    "require-dev": {
+        "illuminate/database": "*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/Arcane/"
+        ],
+        "psr-4": {
+            "Arcane\\": "src/Arcane/"
+        }
+
+    },
+    "minimum-stability": "dev"
+}
