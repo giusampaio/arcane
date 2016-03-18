@@ -95,7 +95,7 @@ class Schema
 	*/
 	public function save()
 	{
-		if ($this->hasTable($this->table)) {
+		if (!$this->hasTable($this->table)) {
 			return $this->add();
 		}
 
@@ -120,15 +120,3 @@ class Schema
 		return true;
 	}
 }
-
-$schema = new Schema();
-
-$sql = $schema->table('user')
-	   		  ->int('id')
-	   		  ->string('nome')
-	   		  ->string('sobrenome')
-	   		  ->text('description')
-	   		  ->engine('innoDB')
-	   		  ->save();
-
-print($sql);

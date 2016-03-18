@@ -5,6 +5,7 @@ namespace Arcane\Console\Facades;
 use Arcane\Console\View;
 use Arcane\Console\Model;
 use Arcane\Console\Module;
+use Arcane\Console\Migrate;
 use Arcane\Console\Console;
 use Arcane\Console\Project;
 use Arcane\Console\Controller;
@@ -56,6 +57,10 @@ class Fantasy extends Terminal
 				return $view->init($params);
 				break;	
 
+			case 'migrate':
+				return $this->migrate($entity, $params);
+				break;	
+				
 			default:
 				return 'Entity '.$entity.' not found';
 				break;
@@ -67,7 +72,35 @@ class Fantasy extends Terminal
 	 */
 	public function migrate($entity, $params)
 	{
+		if ( ! strpos($params, '.') ) {
+			$path = $params . DS . 'starter' . DS . 'models';
 
+		} else {
+			$pieces = split('.', $params);
+			$path   = $pieces[0] . DS . 'modules' . DS . $pieces[1]; 
+		} 		
+
+		$files = scandir($path);
+
+		unset($files[0]);
+		unset($files[1]);
+
+		foreach ($files as $file) {
+
+			include_once $path . DS . $file;
+
+			$class = 'blog\\Starter\\Models\\' . str_replace('.php', '', $file);
+
+			if ( ! class_exists($class) ) continue;
+
+			$obj = new $class();
+
+			if ( ! method_exists($obj, 'up') ) continue;
+
+			$ret = call_user_func_array([$obj, 'up'], []);
+		}
+
+		return true;
 	}
 
 	/*

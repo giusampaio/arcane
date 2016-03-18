@@ -8,6 +8,18 @@ $baseDir = dirname($vendorDir);
 return array(
     'Arcane\\Application\\App' => $baseDir . '/src/Arcane/Application/App.php',
     'Arcane\\Autoload\\Load' => $baseDir . '/src/Arcane/Autoload/Load.php',
+    'Arcane\\Console\\Color' => $baseDir . '/src/Arcane/Console/Color.php',
+    'Arcane\\Console\\Console' => $baseDir . '/src/Arcane/Console/Console.php',
+    'Arcane\\Console\\Controller' => $baseDir . '/src/Arcane/Console/Controller.php',
+    'Arcane\\Console\\Facades\\Fantasy' => $baseDir . '/src/Arcane/Console/Facades/Fantasy.php',
+    'Arcane\\Console\\Facades\\Terminal' => $baseDir . '/src/Arcane/Console/Facades/Terminal.php',
+    'Arcane\\Console\\Model' => $baseDir . '/src/Arcane/Console/Model.php',
+    'Arcane\\Console\\Module' => $baseDir . '/src/Arcane/Console/Module.php',
+    'Arcane\\Console\\Project' => $baseDir . '/src/Arcane/Console/Project.php',
+    'Arcane\\Console\\View' => $baseDir . '/src/Arcane/Console/View.php',
     'Arcane\\Http\\Request' => $baseDir . '/src/Arcane/Http/Request.php',
+    'Arcane\\Model\\Model\\Migrate' => $baseDir . '/src/Arcane/Console/Migrate.php',
+    'Arcane\\Model\\Model\\Model' => $baseDir . '/src/Arcane/Model/Model.php',
+    'Arcane\\Model\\Schema' => $baseDir . '/src/Arcane/Model/Schema.php',
     'Arcane\\View\\Template' => $baseDir . '/src/Arcane/View/Template.php',
 );
