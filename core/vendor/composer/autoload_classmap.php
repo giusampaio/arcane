@@ -18,8 +18,9 @@ return array(
     'Arcane\\Console\\Project' => $baseDir . '/src/Arcane/Console/Project.php',
     'Arcane\\Console\\View' => $baseDir . '/src/Arcane/Console/View.php',
     'Arcane\\Http\\Request' => $baseDir . '/src/Arcane/Http/Request.php',
+    'Arcane\\Model\\Model' => $baseDir . '/src/Arcane/Model/Model.php',
     'Arcane\\Model\\Model\\Migrate' => $baseDir . '/src/Arcane/Console/Migrate.php',
-    'Arcane\\Model\\Model\\Model' => $baseDir . '/src/Arcane/Model/Model.php',
     'Arcane\\Model\\Schema' => $baseDir . '/src/Arcane/Model/Schema.php',
     'Arcane\\View\\Template' => $baseDir . '/src/Arcane/View/Template.php',
+    'Onix\\Database\\Database' => $baseDir . '/src/Arcane/Model/Database.php',
 );

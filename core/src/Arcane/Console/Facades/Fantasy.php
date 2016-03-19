@@ -73,17 +73,24 @@ class Fantasy extends Terminal
 	public function migrate($entity, $params)
 	{
 		if ( ! strpos($params, '.') ) {
-			$path = $params . DS . 'starter' . DS . 'models';
-
+			$path    = $params . DS . 'starter' . DS . 'models';
+			$project = $params;
 		} else {
 			$pieces = split('.', $params);
-			$path   = $pieces[0] . DS . 'modules' . DS . $pieces[1]; 
+			$path    = $pieces[0] . DS . 'modules' . DS . $pieces[1]; 
+			$project = $pieces[0];
 		} 		
 
 		$files = scandir($path);
 
 		unset($files[0]);
 		unset($files[1]);
+
+		$config = strtolower($project .DS . 'starter' . DS . 'config.php');
+
+		if ( is_file($config) ) {
+			define('CONFIG_FILE', realpath($config));
+		}
 
 		foreach ($files as $file) {
 

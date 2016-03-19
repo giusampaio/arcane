@@ -2,15 +2,33 @@
 
 namespace Arcane\Model;
 
+use Arcane\Model\Database;
+
 class Schema 
 {
+	/**
+	 * Array fields 
+	 * @var array
+	 */
 	private $fields;
+
+	/**
+	 * Table name
+	 * @var string
+	 */
 	private $table;
+
+	/**
+	 * Engine 
+	 * @var string
+	 */
 	private $engine;
 
-	/*
-
-	*/
+	/**
+	 * @param  [type]
+	 * @param  mixed 
+	 * @return self
+	 */
 	public function __call($type, $name)
 	{
 		if ($type == 'table' || $type=='engine') {
@@ -18,31 +36,39 @@ class Schema
 			return $this;
 		}
 
+		if ($type=='varchar') {
+			$type = 'varchar(50)';
+		}
+
 		$this->fields[$type][] = $name;
 		return $this;
 	}
 
-	/*
+	/**
+	 * @param [type]
+	 */
+	public function setConnection($db)
+	{
+		$this->db = $db;
+	}
 
-	*/
+	/**
+	 * 
+	 * @return [type]
+	 */
 	public function create()
 	{
 		$headerSQL = 'CREATE TABLE '. $this->table . '(';
-		$footerSQL = '); Engine='. $this->engine;
+		$footerSQL = ') Engine='. $this->engine;
 		$fieldSQL  = '';
 
 		foreach($this->fields as $type => $fields) {
-
 			foreach ($fields as $i => $field) {
-
 				foreach ($field as $name) {
-
-					$type = $this->getAliasField($type);
-			
+					$type = $this->getAliasField($type); 
 					$fieldSQL .= (strlen($fieldSQL)) ? ', ': '';
 					$fieldSQL .= sprintf('%s %s', $name, $type);
 				}
-
 			}
 		}
 
@@ -61,17 +87,12 @@ class Schema
 		$fieldSQL  = '';
 
 		foreach($this->fields as $type => $fields) {
-
 			foreach ($fields as $i => $field) {
-
 				foreach ($field as $name) {
-
 					$type = $this->getAliasField($type);
-
 					$fieldSQL .= (strlen($fieldSQL)) ? ', ': '';
 					$fieldSQL .= sprintf(' ADD COLUMN %s %s', $name, $type);
 				}
-
 			}
 		}
 
@@ -95,20 +116,23 @@ class Schema
 	*/
 	public function save()
 	{
-		if (!$this->hasTable($this->table)) {
-			return $this->add();
-		}
+		$sql = ($this->hasTable($this->table)) ? $this->add() : $this->create();
 
-		return $this->create();
+		$this->db->exec($sql);
 	}
 
 
 	/*
 		
 	*/
-	public function hasTable()
+	public function hasTable($table)
 	{
-		return true;
+		$search = 'SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME =:table';
+		$values	= [':table' => $table];
+
+		$ret = $this->db->select($search, $values);
+		
+		return empty($ret) ? false : true;
 	}
 
 
