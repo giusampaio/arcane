@@ -3,7 +3,7 @@ comando p/ criar modulos            		OK!
 comando p/ criar model						OK!        
 comando p/ criar controllers        		OK!
 comando p/ criar sql						
-comando p/ criar estruturar base de dados
+comando p/ criar estruturar base de dados   OK
 
 
 refatorar terminal

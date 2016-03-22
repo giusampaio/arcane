@@ -89,7 +89,9 @@ class Schema
 		foreach($this->fields as $type => $fields) {
 			foreach ($fields as $i => $field) {
 				foreach ($field as $name) {
-					$type = $this->getAliasField($type);
+					$type    = $this->getAliasField($type);
+					$command = $this->hasColumn();
+					
 					$fieldSQL .= (strlen($fieldSQL)) ? ', ': '';
 					$fieldSQL .= sprintf(' ADD COLUMN %s %s', $name, $type);
 				}
@@ -101,14 +103,17 @@ class Schema
 		return $sql;
 	}
 
-	/*
-		Get field name by alias
-	*/
+	/**
+	 * 
+	 * 
+	 * @param  [type]
+	 * @return [type]
+	 */
 	public function getAliasField($alias)
 	{
 		$list['string'] = 'varchar';
 
-		return (isset($list[$alias]) ) ? $list[$alias] : $alias;
+		return (isset($list[$alias])) ? $list[$alias] : $alias;
 	}
 
 	/*
@@ -139,8 +144,20 @@ class Schema
 	/*
 		
 	*/
-	public function hasField()
+	public function hasColumn($table, $column)
 	{
-		return true;
+		$search = 'SELECT * 
+						FROM INFORMATION_SCHEMA.COLUMNS 
+					WHERE 
+					    TABLE_SCHEMA = :database 
+						AND TABLE_NAME  = :table
+						AND COLUMN_NAME = :column';
+
+
+		$values	= [':table' => $table];
+
+		$ret = $this->db->select($search, $values);
+		
+		return empty($ret) ? false : true;
 	}
 }

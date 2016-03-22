@@ -24,16 +24,10 @@ class Database extends Capsule
     /**
      * @return [type]
      */
-    public function connect()
+    public function connect($driver)
     {
-        $config = include_once CONFIG_FILE;
-
-        $driver =  $config['database'];
-
         $this->addConnection($driver);          
-
         $this->bootEloquent();
-
         $this->pdo = $this->getConnection()->getPdo();
     }   
 
