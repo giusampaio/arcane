@@ -31,4 +31,12 @@ class Model extends Eloquent
 		$this->schema->setConnection($this->db);
 	}
 
+	/**
+	 * @return [type]
+	 */
+	public function connect()
+	{
+
+	}
+
 }

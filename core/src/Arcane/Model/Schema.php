@@ -149,12 +149,12 @@ class Schema
 		$search = 'SELECT * 
 						FROM INFORMATION_SCHEMA.COLUMNS 
 					WHERE 
-					    TABLE_SCHEMA = :database 
-						AND TABLE_NAME  = :table
-						AND COLUMN_NAME = :column';
+					    TABLE_SCHEMA = :database AND 
+						TABLE_NAME  = :table AND
+						COLUMN_NAME = :column ';
 
 
-		$values	= [':table' => $table];
+		$values	= [':table' => $table, ':column' => $column, ':'];
 
 		$ret = $this->db->select($search, $values);
 		

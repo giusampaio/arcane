@@ -2,8 +2,8 @@
 
 namespace Arcane\Application;
 
-use Arcane\Http\Request as Request;
 use Arcane\Autoload\Load as Load;
+use Arcane\Http\Request as Request;
 
 class App
 {
