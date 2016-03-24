@@ -7,26 +7,35 @@ use Arcane\Http\Request as Request;
 
 class App
 {
-	/*
-		Bootstrap do Framework
-	*/
+	use \Arcane\Traits\Debug;
+
+	/**
+	 * Bootstrap application 
+	 * 
+	 * @return mixed
+	 */
 	public function run()
 	{
+		Load::registerAutoload();
+
 		$this->setConsts();
 
 		$project = ucfirst(Request::getProject());
 
 		$namespace = "\\$project\\Starter\\";
 
-		$class = Load::getClass($namespace, 'index', null);
+		$class = Load::getClass($namespace, 'Index', null);
+
+		$this->say($class);
 
 		$class->process();
 	}
 
-	/*
-		Define as constantes do sistema
-	*/
-	private function setConsts()
+	
+	/**
+	 * Set einvoirement constants
+	 */
+	public function setConsts()
 	{
 		$vendorDir = dirname(dirname(__FILE__));
 		

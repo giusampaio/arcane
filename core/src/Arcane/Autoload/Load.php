@@ -6,32 +6,53 @@ use Arcane\Http\Request;
 
 class Load
 {
-	//
+	use \Arcane\Traits\Debug;
+
+	/**
+	 * [$prefix description]
+	 * @var [type]
+	 */
 	protected static $prefix;
 
-	/*
-      Returns the encoding used by the Stringy object.
-     
-      @return string The current value of the $encoding property
-     */
-	public static function getClass($namespace, $class, $params)
+	/**
+	 * Register Arcane Autoload
+	 */
+	public static function registerAutoload()
 	{
 		spl_autoload_register(array(__CLASS__, 'autoload'), true, true);		
+	}
+
+	/**
+	 * [getClass description]
+	 * @param  [type] $namespace [description]
+	 * @param  [type] $class     [description]
+	 * @param  [type] $params    [description]
+	 * @return [type]            [description]
+	 */
+	public static function getClass($namespace, $class, $params)
+	{		
+		$directory = str_replace('\\', DS, $namespace);
 		
 		$class = ucfirst($class);
+
+		$file = ARCANE_PATH . DS . $directory . DS . $class .'.php';
+
+		//die($file);
+
+		if ( ! is_file($file) ) return false;
 
 		$namespace .= $class;
 
 		return new $namespace($params);
 	}
 
-	/*
-     	Carrega o modulo do projeto
-     */
+	/**
+	 * [getModule description]
+	 * @param  [type] $module [description]
+	 * @return [type]         [description]
+	 */
 	public static function getModule($module = null)
 	{
-		spl_autoload_register(array(__CLASS__, 'autoload'), true, true);
-
 		$module = ( $module == null ) ? Request::getModule() : $module; 	
 
 		$class = ucfirst($module);
@@ -49,32 +70,38 @@ class Load
 		return new $namespace();
 	}
 
-	/*
-	  	Load files in lowercase structure directory
-	 
-		@param  string $class
-		@return bool
-	*/
+	/**
+	 * [setPrefix description]
+	 * 
+	 * @param [type] $namespace [description]
+	 * @param [type] $base      [description]
+	 */
 	public static function setPrefix($namespace, $base)
 	{
 		self::$prefix[$namespace] = $base;
 	}
 	
 	
-	/*
-     	Autoload das aplicações gerenciadas pelo Arcane
-     
-     	@return string The current value of the $encoding property
-     */
+	/**
+	 * [autoload description]
+	 * 
+	 * @param  [type] $class [description]
+	 * @return [type]        [description]
+	 */
 	private static function autoload($class)
 	{
-		self::setPrefix('Arcane', ROOT_PATH . DS . ARCANE_PATH);
+		$alias = self::getAliasNamespace($class);
+
+		$class = ($alias == false) ? $class : $alias;
+
+		self::setPrefix('Arcane',  ARCANE_PATH);
+		self::setPrefix('Default', ROOT_PATH);
 
 		if ( self::autoloadSimple($class) == true ) {
 			return true;
 		}
 
-		elseif ( self::autoloadLowerCase($class) == true ) {
+		if ( self::autoloadLowerCase($class) == true ) {
 			return true;
 		}
 
@@ -83,9 +110,27 @@ class Load
 		}
 	}
 
-	/*
+	/**
+	 * [getAliasNamespace description]
+	 * 
+	 * @param  [type] $class [description]
+	 * @return [type]        [description]
+	 */
+	private static function getAliasNamespace($class)
+	{
+		$alias['Model']      = 'Arcane\\Layers\\Model';
+		$alias['Controller'] = 'Arcane\\Layers\\Controller';
 
-	*/
+		if ( isset($alias[$class]) ) {
+			return $alias[$class];
+		}
+
+		return false;
+	}
+
+	
+
+	
 	private static function autoloadSimple($class)
 	{
 		$namespace = explode('\\', $class);
@@ -99,7 +144,7 @@ class Load
 		if(file_exists($fullPath)) {
 		 		
 	 		require_once($fullPath);
-
+	 		print($fullPath . PHP_EOL);
 	 		return true;
 		}
 
@@ -116,16 +161,16 @@ class Load
 	private static function autoloadLowerCase($class) 
 	{
 		$namespace = explode('\\', $class);
-
 		$class 	   = array_pop($namespace) . '.php';
 
 		$path      = strtolower(implode('\\', $namespace));
-
-		$file 	   = str_replace("\\", "/" , $path . DS . $class);
+		$file 	   = str_replace("\\", DS, $path . DS . $class);
 
 		foreach (self::$prefix as $base) {
 
 			$fullPath = $base . $file;
+
+			print
 
 			if( file_exists($fullPath) ) {
 		 		
@@ -138,11 +183,10 @@ class Load
 		return false;
 	}
 
-	/*
-		Load files in lowercase structure directory
-	 
-		@param  string $class
-		@return bool
+	/**
+	 * [autoloadPSR0 description]
+	 * @param  [type] $class [description]
+	 * @return [type]        [description]
 	 */
 	private static function autoloadPSR0($class) 
 	{
@@ -150,22 +194,16 @@ class Load
 		$class 	   = ucfirst(array_pop($namespace)) . '.php';
 
 		$path      = implode('\\', $namespace);
-		$file 	   = str_replace("\\", "/" , $path . DS . $class);
+		$file 	   = str_replace("\\", DS, $path . DS . $class);
 
 		foreach (self::$prefix as $namespaceBase => $base) {
 
-			$fullPath = $base . $file; 	
+			$fullPath = $base . DS . $file; 	
 
-			$namespaceBase = str_replace("\\", "/" , $namespaceBase);
-
-			$fullPath = str_replace($namespaceBase, "" , $fullPath);
-
-			if( file_exists($fullPath) ) {
-
+			if ( is_file($fullPath) ) {
 		 		require_once($fullPath);
-
-				return true;
-		 	}	
+		 		return true;
+			} 	 	
 		}
 
 		return false;

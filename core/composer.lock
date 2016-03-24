@@ -4,9 +4,57 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7f0934a0cf05efdf3b27c08a0355e0e9",
-    "content-hash": "c40ef05985fea8330c3b21453c2a43b8",
+    "hash": "6a0487127f0d282efe655b502dbdbd50",
+    "content-hash": "f55d7a5ed6ffc34152ea6d3cad7f7abc",
     "packages": [
+        {
+            "name": "aura/router",
+            "version": "3.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Router.git",
+                "reference": "aeb49c8903cb07561022e2b65ef16c68fd2c01da"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Router/zipball/aeb49c8903cb07561022e2b65ef16c68fd2c01da",
+                "reference": "aeb49c8903cb07561022e2b65ef16c68fd2c01da",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0",
+                "psr/http-message": "~1.0",
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "zendframework/zend-diactoros": "~1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Router\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Router Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Router/contributors"
+                }
+            ],
+            "description": "Powerful, flexible web routing for PSR-7 requests.",
+            "homepage": "https://github.com/auraphp/Aura.Router",
+            "keywords": [
+                "psr-7",
+                "route",
+                "router",
+                "routing"
+            ],
+            "time": "2015-12-01 15:31:40"
+        },
         {
             "name": "doctrine/inflector",
             "version": "dev-master",
@@ -123,12 +171,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "979d9419949834d5dc2d6e1b3733ecf009157746"
+                "reference": "54ae17b98cdd1016d2c578d2f36c562ae764a433"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/979d9419949834d5dc2d6e1b3733ecf009157746",
-                "reference": "979d9419949834d5dc2d6e1b3733ecf009157746",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/54ae17b98cdd1016d2c578d2f36c562ae764a433",
+                "reference": "54ae17b98cdd1016d2c578d2f36c562ae764a433",
                 "shasum": ""
             },
             "require": {
@@ -157,7 +205,7 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "http://laravel.com",
-            "time": "2016-03-13 19:51:04"
+            "time": "2016-03-19 17:16:22"
         },
         {
             "name": "illuminate/database",
@@ -165,12 +213,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "040172e0b513349fceecddcf2c30e81973fdb0a5"
+                "reference": "442b4e5ced1890e01aa137fe28dccf4e3470a64f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/040172e0b513349fceecddcf2c30e81973fdb0a5",
-                "reference": "040172e0b513349fceecddcf2c30e81973fdb0a5",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/442b4e5ced1890e01aa137fe28dccf4e3470a64f",
+                "reference": "442b4e5ced1890e01aa137fe28dccf4e3470a64f",
                 "shasum": ""
             },
             "require": {
@@ -217,7 +265,7 @@
                 "orm",
                 "sql"
             ],
-            "time": "2016-03-18 14:17:17"
+            "time": "2016-03-22 13:39:31"
         },
         {
             "name": "illuminate/support",
@@ -414,6 +462,102 @@
                 "random"
             ],
             "time": "2016-03-18 20:34:03"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "85d63699f0dbedb190bbd4b0d2b9dc707ea4c298"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/85d63699f0dbedb190bbd4b0d2b9dc707ea4c298",
+                "reference": "85d63699f0dbedb190bbd4b0d2b9dc707ea4c298",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2015-05-04 20:22:00"
+        },
+        {
+            "name": "psr/log",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "d8e60a5619fff77f9669da8997697443ef1a1d7e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/d8e60a5619fff77f9669da8997697443ef1a1d7e",
+                "reference": "d8e60a5619fff77f9669da8997697443ef1a1d7e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2016-01-06 21:40:42"
         },
         {
             "name": "symfony/polyfill-mbstring",

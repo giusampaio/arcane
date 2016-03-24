@@ -3,8 +3,8 @@
 
 require_once 'core/vendor/autoload.php';
 
-use Arcane\Console\Facades\Fantasy;
+use Arcane\Console\Terminal;
 
-$terminal = new Fantasy();
+$terminal = new Terminal();
 
-$terminal->input($argv);
+$terminal->execute($argv);

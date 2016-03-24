@@ -12,7 +12,8 @@
     "require": {
         "php": ">=5.3.3",
         "illuminate/database": "*",
-        "mustache/mustache": "~2.5"
+        "mustache/mustache": "~2.5",
+        "aura/router": "^3.0"
     },
     "require-dev": {
         "illuminate/database": "*"

@@ -1,6 +1,6 @@
 <?php
 
-namespace Arcane\Model;
+namespace Arcane\Layers;
 
 use Arcane\Model\Schema;
 use Arcane\Model\Database;
