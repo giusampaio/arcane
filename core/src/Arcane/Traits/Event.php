@@ -27,9 +27,11 @@ trait Event
             return false;
         }
 
-        call_user_func_array(array($this, $actualMethod), $args);
+        $ret = call_user_func_array(array($this, $actualMethod), $args);
 
-        $this->executeBefore($method);
+        $ret .= $this->executeBefore($method);
+
+        return $ret;
     }
 
     /**

@@ -46,7 +46,7 @@ trait Handler
 	public function fopenWrite($file, $string)
 	{
 		if ( ! $handle = fopen($file, 'w') ) {
-			throw new Exception("Fail to writing in ".$file , 1);			
+			throw new \Exception("Fail to writing in ".$file , 1);			
 		} 
 
 		return fwrite($handle, $string);

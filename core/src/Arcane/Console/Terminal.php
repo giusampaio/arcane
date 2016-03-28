@@ -166,10 +166,8 @@ class Terminal
 	{
 		$namespace = 'Arcane\\Console\\Resource\\';
 		
-		$obj = Load::getClass($namespace, $this->entity, null);
+		if (Load::is_arcane($namespace, $this->entity) == false) return false;
 
-		if ($obj == false) return false;
-
-		return $obj;
+		return Load::getClass($namespace, $this->entity, null);;
 	}
 }

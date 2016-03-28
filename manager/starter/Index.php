@@ -15,7 +15,7 @@ class Index extends Controller
 	 */
 	public function _before()
 	{
-        $this->router->post('/minha-casinha-vermelha');
+
 	}
 
 	/**

@@ -31,8 +31,7 @@ class Base
 	protected $project;
 
 
-	protected $templateDir = ARCANE_PATH . DS . 'Arcane' . 
-						 	 DS . 'Console' . DS . 'Templates';
+	protected $templateDir = ARCANE_PATH . DS . 'Console' . DS . 'Templates';
 
 	/**
 	 * Set project name

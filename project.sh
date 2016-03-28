@@ -1,4 +1,4 @@
-php arcane summon:project Manager  --theme dashboard
+php arcane summon:project Manager  --theme dashboard 
 
 php arcane summon:module Agencia110.User --project Manager
 

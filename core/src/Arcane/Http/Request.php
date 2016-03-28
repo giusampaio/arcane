@@ -29,6 +29,19 @@ class Request
 		}
 	}
 
+	/**
+	 * [getAction description]
+	 * @return [type] [description]
+	 */
+	public static function getAction()
+	{
+	if (isset($_REQUEST['action']) ) {
+			return $_REQUEST['action'];
+		} else {
+			return null;
+		}	
+	}
+
 	/*
 		Get default name project on config file
  	*/

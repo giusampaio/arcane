@@ -22,11 +22,11 @@ class App
 
 		$project = ucfirst(Request::getProject());
 
+		$this->setProjecConfig($project);
+
 		$namespace = "\\$project\\Starter\\";
 
 		$class = Load::getClass($namespace, 'Index', null);
-
-		$this->say($class);
 
 		$class->process();
 	}
@@ -38,13 +38,33 @@ class App
 	public function setConsts()
 	{
 		$vendorDir = dirname(dirname(__FILE__));
-		
+
 		$baseDir = dirname($vendorDir);
 
-		define('ARCANE_PATH', $baseDir);
+		define('ARCANE_PATH', $vendorDir);
 		
 		define('ROOT_PATH', realpath('.'));
 
 		define('DS', DIRECTORY_SEPARATOR);
+	}
+
+	/**
+	 * Set configuration data of project 
+	 * 
+	 * @return mixed
+	 */
+	public function setProjecConfig($project)
+	{
+		$project = strtolower($project);
+
+		$file = ROOT_PATH . DS . $project . DS . 'starter' . DS . 'config.json';
+
+		if (! is_file($file) ) return false;
+
+		$handler = fopen($file, 'r');
+
+		$config  = fread($handler, filesize($file));
+
+		define('CONFIG', $config);
 	}
 }

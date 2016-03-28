@@ -20,6 +20,8 @@ class Project extends Base
 
 		$this->generateDirs();
 
+		$this->generateConfigJson();
+
 		$this->generateControllers();
 	}
 
@@ -40,9 +42,10 @@ class Project extends Base
 				   ->setArgs($args)
 				   ->summon();
 
-		$args = ['type' => 'controller'];
+		$args = ['type' => 'service'];
 
-		$controller->setArgs($args);
+		$controller->setArgs($args)
+				   ->summon();
 	}
 
 	/**
@@ -63,7 +66,7 @@ class Project extends Base
 	 */
 	public function generateDirs()
 	{
-		$dirs = ['assets','controllers','views','models'];
+		$dirs = ['assets','controller','view','model'];
 		$base = $this->project . DS . 'starter';
 
 		foreach ($dirs as $dir) {
@@ -72,5 +75,21 @@ class Project extends Base
 
 		$base = $this->project . DS . 'modules';
 		$this->mkDir($base);
+	}
+
+	/**
+	 * Generate config.json
+	 * 
+	 * @return mixed
+	 */
+	public function generateConfigJson()
+	{
+		$path = ARCANE_PATH . DS . 'Console' . DS . 'Templates';
+
+		$file =  $path . DS . 'Config' . DS . 'config.json';
+
+		$newFile = ROOT_PATH . DS . strtolower($this->project . DS . 'starter' . DS . 'config.json');
+
+		return copy($file, $newFile);
 	}
 }

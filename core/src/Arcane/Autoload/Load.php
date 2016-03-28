@@ -9,8 +9,9 @@ class Load
 	use \Arcane\Traits\Debug;
 
 	/**
-	 * [$prefix description]
-	 * @var [type]
+	 * List with prefix namespaces
+	 * 
+	 * @var array
 	 */
 	protected static $prefix;
 
@@ -23,27 +24,40 @@ class Load
 	}
 
 	/**
-	 * [getClass description]
-	 * @param  [type] $namespace [description]
-	 * @param  [type] $class     [description]
-	 * @param  [type] $params    [description]
-	 * @return [type]            [description]
+	 * Get a object class from project or Arcane Framework
+	 * 
+	 * @param  string $namespace Object's namespace 
+	 * @param  string $class     Object's class
+	 * @param  array  $params    Args for object construct 
+	 * @return object            Object requested
 	 */
 	public static function getClass($namespace, $class, $params)
 	{		
-		$directory = str_replace('\\', DS, $namespace);
-		
 		$class = ucfirst($class);
-
-		$file = ARCANE_PATH . DS . $directory . DS . $class .'.php';
-
-		//die($file);
-
-		if ( ! is_file($file) ) return false;
 
 		$namespace .= $class;
 
 		return new $namespace($params);
+	}
+
+	/**
+	 * Check if is a arcane file 
+	 * 
+	 * @param  string $namespace Object's namespace 
+	 * @param  string $class     Object's class
+	 * @return boolean           
+	 */
+	public static function is_arcane($namespace, $class)
+	{
+		$directory = str_replace('Arcane\\', '', $namespace);
+
+		$directory = str_replace('\\', DS, $directory);
+
+		$class = ucfirst($class);
+
+		$file = ARCANE_PATH . DS . $directory . $class .'.php';
+		
+		return is_file($file);
 	}
 
 	/**
@@ -55,10 +69,8 @@ class Load
 	{
 		$module = ( $module == null ) ? Request::getModule() : $module; 	
 
-		$class = ucfirst($module);
-
-		$module = ucfirst($module);
-
+		$class   = ucfirst($module);
+		$module  = ucfirst($module);
 		$history = debug_backtrace();
 		
 		$lastClass = $history[1]['class'];
@@ -68,6 +80,11 @@ class Load
 		$namespace = "\\$project\\Modules\\$module\\$class"; 
 
 		return new $namespace();
+	}
+
+	public static function getAction()
+	{
+		return Request::getAction();
 	}
 
 	/**
@@ -128,9 +145,7 @@ class Load
 		return false;
 	}
 
-	
 
-	
 	private static function autoloadSimple($class)
 	{
 		$namespace = explode('\\', $class);
@@ -142,9 +157,7 @@ class Load
 		$fullPath  = ROOT_PATH . DS . $path . DS . $class;  
 
 		if(file_exists($fullPath)) {
-		 		
 	 		require_once($fullPath);
-	 		print($fullPath . PHP_EOL);
 	 		return true;
 		}
 
@@ -152,12 +165,12 @@ class Load
 	}
 
 
-	/*
-		Load files in lowercase structure directory
-	 
-	  	@param  string $class
-	  	@return bool
-	*/
+	/**
+	 *	Load files in lowercase structure directory
+	 *	
+	 * @param  string $class Class with namespace 
+	 * @return bool 
+	 */
 	private static function autoloadLowerCase($class) 
 	{
 		$namespace = explode('\\', $class);
@@ -170,12 +183,8 @@ class Load
 
 			$fullPath = $base . $file;
 
-			print
-
 			if( file_exists($fullPath) ) {
-		 		
 		 		require_once($fullPath);
-
 		 		return true;
 			}
 		}
