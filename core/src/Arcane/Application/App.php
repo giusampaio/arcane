@@ -4,10 +4,19 @@ namespace Arcane\Application;
 
 use Arcane\Autoload\Load as Load;
 use Arcane\Http\Request as Request;
+use Arcane\View\Template;
 
 class App
 {
 	use \Arcane\Traits\Debug;
+	use \Arcane\Traits\Resource;
+
+	protected $load;
+
+	public function __construct()
+	{
+		$this->load = new Load();
+	}
 
 	/**
 	 * Bootstrap application 
@@ -19,16 +28,12 @@ class App
 		Load::registerAutoload();
 
 		$this->setConsts();
+		$this->setConfig();
 
-		$project = ucfirst(Request::getProject());
+		$starter = $this->starter();
+		$view    = $starter->view('layout');
 
-		$this->setProjecConfig($project);
-
-		$namespace = "\\$project\\Starter\\";
-
-		$class = Load::getClass($namespace, 'Index', null);
-
-		$class->process();
+		echo $view->render($starter);		
 	}
 
 	
@@ -42,9 +47,7 @@ class App
 		$baseDir = dirname($vendorDir);
 
 		define('ARCANE_PATH', $vendorDir);
-		
 		define('ROOT_PATH', realpath('.'));
-
 		define('DS', DIRECTORY_SEPARATOR);
 	}
 
@@ -53,16 +56,20 @@ class App
 	 * 
 	 * @return mixed
 	 */
-	public function setProjecConfig($project)
+	public function setConfig()
 	{
-		$project = strtolower($project);
+		// Get current project name
+		$req = new Request();
+		$project = strtolower($req->project());
 
+		// Mount config.json path
 		$file = ROOT_PATH . DS . $project . DS . 'starter' . DS . 'config.json';
 
+		// Check if exists...
 		if (! is_file($file) ) return false;
 
+		//Open file and get content inside...
 		$handler = fopen($file, 'r');
-
 		$config  = fread($handler, filesize($file));
 
 		define('CONFIG', $config);

@@ -4,6 +4,7 @@ namespace Arcane\Layers;
 
 use Aura\Router\RouterContainer;
 use Arcane\Autoload\Load;
+use Arcane\Layers\View;
 
 class Controller
 {
@@ -25,16 +26,6 @@ class Controller
 	}
 
 	/**
-	 * Check 
-	 */
-	public function setRoute()
-	{
-		if (! is_object($this->router)) return false;
-
-		$this->router = new RouterContainer();
-	}
-
-	/**
 	 * [resources description]
 	 * @param  [type] $obj [description]
 	 * @return [type]      [description]
@@ -50,5 +41,21 @@ class Controller
 		if (! method_exists($obj, $action)) return false;
 
 		return call_user_func_array([$obj, $action], []);	
+	}
+
+	/**
+	 * 
+	 * @return 
+	 */
+	public function view($tpl)
+	{
+		// Template path of controller 
+		$path = dirname(get_class($this)) . DS . 'view';
+
+		// Get a view layer
+		$view = new View();
+
+		// Set path and return Mustache object
+		return $view->path($path)->get($tpl);
 	}
 }

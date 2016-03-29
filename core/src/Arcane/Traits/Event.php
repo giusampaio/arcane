@@ -23,7 +23,6 @@ trait Event
         $actualMethod = '_'.$method;
 
         if ( ! method_exists($this, $actualMethod) ) {
-            print('not existes');
             return false;
         }
 

@@ -1,23 +1,36 @@
 <?php
 
-namespace Arcane\View;
+namespace Arcane\Layers;
 
 use Mustache\Mustache_Autoloader;
 
-class Template 
+class View 
 {	
-	/*
-		Retorna o objeto
-	*/
-	public static function get($view)
+
+	/**
+	 * Set path to template dirs
+	 * @param  string $path [description]
+	 * @return [type]       [description]
+	 */
+	public function path($path)
+	{
+		$this->path = strtolower($path);
+
+		return $this;
+	}
+
+	/**
+	 * [get description]
+	 * @param  [type] $view [description]
+	 * @return [type]       [description]
+	 */
+	public function get($view)
 	{	
 		\Mustache_Autoloader::register();
-
-		$path = self::getViewPath();
 		
 		$options = ['extension' => 'tpl']; 
 
-		$loader = new \Mustache_Loader_FilesystemLoader($path, $options);
+		$loader = new \Mustache_Loader_FilesystemLoader($this->path, $options);
 
 		$config = ['loader' => $loader];
 
@@ -30,7 +43,7 @@ class Template
 	/*
 		Consulta o histórico de classes executadas e retorna o caminho para view 
 	*/
-	private static function getViewPath()
+	private function getViewPath()
 	{
 		$history  = debug_backtrace();
 

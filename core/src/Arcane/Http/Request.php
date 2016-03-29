@@ -4,66 +4,63 @@ namespace Arcane\Http;
 
 class Request
 {
-	/*
-		Tenta pegar o nome do projeto 
-	*/
-	public static function getProject()
-	{
-		if (isset($_REQUEST['project'])) {
-			return $_REQUEST['project'];
-		
-		} else {
-			return self::getProjectByFile();
-		} 
-	}
+	use \Arcane\Traits\Debug;
 
-	/*
-		Tenta pegar o nome do modulo do projeto 
-	*/
-	public static function getModule()
+	/**
+	 * Parse URL and try get the current project
+	 * 
+	 * @return string
+	 */
+	public function project()
 	{
-		if (isset($_REQUEST['module']) ) {
-			return $_REQUEST['module'];
-		} else {
-			return 'Hello';
-		}
+		return $this->parseUrl('project', 0);
 	}
 
 	/**
-	 * [getAction description]
-	 * @return [type] [description]
+	 * Parse URL and try get the current module
+	 * 
+	 * @return string
 	 */
-	public static function getAction()
+	public function vendor()
 	{
-	if (isset($_REQUEST['action']) ) {
-			return $_REQUEST['action'];
-		} else {
-			return null;
-		}	
+		return $this->parseUrl('vendor', 1);
 	}
 
-	/*
-		Get default name project on config file
- 	*/
-	private static function getProjectByFile()
+	/**
+	 * Parse URL and try get the current module
+	 * 
+	 * @return string
+	 */
+	public function module()
 	{
-		$file   = ROOT_PATH . DS . 'arcane.json';
-
-		if (!file_exists($file)) {
-			$msgError = "{Arcane Error} - Config file not found.";
-			trigger_error($msgError, E_USER_ERROR);
-		}
-		
-		$domain = $_SERVER['HTTP_HOST'];
-		$config = json_decode(file_get_contents($file), true);
-
-		$project = $config['projects'];
-
-		if ( ! isset($project[$domain]) ) {
-			$msgError = '{Arcane Error} - Project not found in config file.';	
-			trigger_error($msgError, E_USER_ERROR); 
-		}
-		
-		return $project[$domain];
+		return $this->parseUrl('module', 2);
 	}
+
+	/**
+	 * Parse some part of URL and return to client
+	 * @param  string  $item  Item name requested
+	 * @param  integer $index Position in array separated by slash
+	 * @return string
+	 */
+	protected function parseUrl($item, $index)
+	{
+		if (isset($_GET[$item])) {
+			return $_GET[$item];
+		}
+
+		$index++;
+
+		$uri = $_SERVER['REQUEST_URI']; 	
+
+		$pieces = explode('/', $uri);
+
+		if (isset($pieces[$index])) {
+			return $pieces[$index];
+		}
+
+		$errExplain = 'Check yout URL and yours configuration project.';
+
+		throw new \Exception(ucfirst($item)." not found. $errExplain", 1);
+	}
+
 }
