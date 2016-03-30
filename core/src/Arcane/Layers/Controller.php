@@ -2,9 +2,9 @@
 
 namespace Arcane\Layers;
 
-use Aura\Router\RouterContainer;
-use Arcane\Autoload\Load;
 use Arcane\Layers\View;
+use Arcane\Http\Request;
+use Aura\Router\RouterContainer;
 
 class Controller
 {
@@ -32,7 +32,9 @@ class Controller
 	 */
 	protected function _resources($obj)
 	{
-		$action = Load::getAction();
+		$req = new Request();
+
+		$action = $req->action();
 
 		if ($action == null) return false;
 

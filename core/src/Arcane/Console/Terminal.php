@@ -62,20 +62,26 @@ class Terminal
 	 */
 	public function execute($args)
 	{
+		// Verifica se tem a quantidade correta de paramêtros
 		if (count($args) < 2 ) {
 			return $this->error('Command Not found');
 		}
 
+		// Verifica se o comando passado é valido
 		if (! $this->parseCmd($args)) { 
 			return $this->error('Command invalid');
 		}
 		
+		// Verifica se os argumentos passado para formar um nome ou namespace 
+		// estão corretos...
 		if (! $this->parseName($args)) {
 		 return $this->error('Name given invalid');
 		}
 
+		// Se tudo estiver OK, chama a entidade em questão
 		$entity = $this->callEntity();
 
+		// Se não existir essa entidade, retorna 
 		if ( $entity == false ) { 
 			return $this->error('Entity not found');
 		}

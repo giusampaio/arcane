@@ -2,9 +2,9 @@
 
 namespace Arcane\Application;
 
+use Arcane\View\Template;
 use Arcane\Autoload\Load as Load;
 use Arcane\Http\Request as Request;
-use Arcane\View\Template;
 
 class App
 {
@@ -13,6 +13,9 @@ class App
 
 	protected $load;
 
+	/**
+	 * Set load object on construct
+	 */
 	public function __construct()
 	{
 		$this->load = new Load();
@@ -31,7 +34,10 @@ class App
 		$this->setConfig();
 
 		$starter = $this->starter();
-		$view    = $starter->view('layout');
+
+		$layout  = $starter->layout;
+
+		$view = $starter->view($layout);
 
 		echo $view->render($starter);		
 	}

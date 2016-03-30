@@ -82,11 +82,6 @@ class Load
 		return new $namespace();
 	}
 
-	public static function getAction()
-	{
-		return Request::getAction();
-	}
-
 	/**
 	 * [setPrefix description]
 	 * 

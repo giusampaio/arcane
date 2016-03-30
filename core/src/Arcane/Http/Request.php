@@ -37,6 +37,20 @@ class Request
 	}
 
 	/**
+	 * Parse URL and try get the current module
+	 * 
+	 * @return string
+	 */
+	public function action()
+	{
+		try {
+			return $this->parseUrl('action', 4);
+		} catch (Exception $e) {
+			return 'index';
+		}
+	}
+
+	/**
 	 * Parse some part of URL and return to client
 	 * @param  string  $item  Item name requested
 	 * @param  integer $index Position in array separated by slash

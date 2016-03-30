@@ -76,4 +76,12 @@ class Base
 
 		return $this;
 	}
+
+	/**
+	 * 
+	 */
+	protected function getTemplateDir()
+	{
+		return $this->templateDir;
+	}
 }

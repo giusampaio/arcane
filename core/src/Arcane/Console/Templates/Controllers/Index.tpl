@@ -8,14 +8,22 @@ use {{projectName}}\Starter\Controllers\Content;
 class Index extends Controller
 {
 
+	public $layout = 'layout';
+
+
+	public function getTitle()
+	{
+		return 'Welcome to the starter';
+	}
+
 	/**
 	 * Endcut for rotines before processing a page
 	 *	
 	 * @return mixed 
 	 */
-	public function _before()
+	public function css()
 	{
-
+		return [];
 	}
 
 	/**
@@ -23,9 +31,9 @@ class Index extends Controller
 	 * 
 	 * @return mixed
 	 */
-	public function _process()
+	public function getContent()
 	{
-
+		return 'A great project was born right now!';
 	}
 
 	/**
@@ -33,8 +41,8 @@ class Index extends Controller
 	 *	
 	 * @return mixed 
 	 */
-	public function _after()
+	public function js()
 	{
-
+		return [];
 	}
 }

@@ -23,6 +23,8 @@ class Project extends Base
 		$this->generateConfigJson();
 
 		$this->generateControllers();
+
+		$this->generateView();
 	}
 
 	/**
@@ -44,19 +46,19 @@ class Project extends Base
 
 		$args = ['type' => 'service'];
 
-		$controller->setArgs($args)
-				   ->summon();
+		return $controller->setArgs($args)->summon();
 	}
 
 	/**
-	 * Check if project exists
 	 * 
-	 * @param  string  $project Name project case insentive
-	 * @return boolean          
+	 * @return boolean
 	 */
-	public function hasProject($project)
+	public function generateView()
 	{
-		return (is_dir(strtolower($project)));
+		$view = new View();
+
+		return $view->setProject($this->project)
+					->summon();
 	}
 
 	/**
@@ -74,6 +76,7 @@ class Project extends Base
 		}
 
 		$base = $this->project . DS . 'modules';
+
 		$this->mkDir($base);
 	}
 
@@ -84,12 +87,24 @@ class Project extends Base
 	 */
 	public function generateConfigJson()
 	{
-		$path = ARCANE_PATH . DS . 'Console' . DS . 'Templates';
+		$path = $this->setProject($this->project)
+					 ->getTemplateDir();
 
 		$file =  $path . DS . 'Config' . DS . 'config.json';
 
 		$newFile = ROOT_PATH . DS . strtolower($this->project . DS . 'starter' . DS . 'config.json');
 
 		return copy($file, $newFile);
+	}
+
+	/**
+	 * Check if project exists
+	 * 
+	 * @param  string  $project Name project case insentive
+	 * @return boolean          
+	 */
+	public function hasProject($project)
+	{
+		return (is_dir(strtolower($project)));
 	}
 }
