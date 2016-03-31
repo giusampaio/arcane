@@ -4,7 +4,7 @@ namespace Arcane\Console\Resource;
 
 use Arcane\Console\Resource\Base;
 
-class Controller extends Base
+class Model extends Base
 {
 	/**
 	 * Invoke a new controller to the project or module
@@ -16,46 +16,27 @@ class Controller extends Base
 		$this->call();
 	}
 
+
 	/**
-	 * Create a Index Controller 
+	 * Create a Service Model
 	 * 
 	 * @return mixed
 	 */
-	public function index()
-	{
-		// Path to find controller index template
-		$tpl  = $this->templateDir. DS .'Controllers'. DS .'Index.tpl';
-		
-		// Params to handle 
-		$vars = ['projectName' => $this->project];
-
-		$content = $this->fopenReplace($tpl, $vars);
-		
-		$file = strtolower($this->project) . DS . 'starter' . DS . 'Index.php'; 
-
-		$this->fopenWrite($file, $content);
-	}
-
-	/**
-	 * Create a Service Controller
-	 * 
-	 * @return mixed
-	 */
-	public function service()
+	public function model()
 	{
 		$namespace = $this->getNamespace();
 
 		// Path to find controller service template
-		$tpl  = $this->templateDir. DS .'Controllers'. DS .'Controller.tpl';
+		$tpl  = $this->templateDir. DS .'Models'. DS .'Model.tpl';
 
 		//If not a vendor, trait like a config starter controller...
-		$nameController = ($this->vendor != null) ? $this->object : 'Config';
+		$nameModel = ($this->vendor != null) ? $this->object : 'Config';
 		
 		// args to send to handler replace on template
-		$vars = ['nameController' => $nameController, 'namespace' => $namespace];
+		$vars = ['nameModel' => $nameModel, 'namespace' => $namespace];
 		
 		// get file name to the new controller
-		$file = $this->getFileName($nameController);
+		$file = $this->getFileName($nameModel);
 
 		// get content of template file
 		$content = $this->fopenReplace($tpl, $vars);
@@ -71,7 +52,7 @@ class Controller extends Base
 	public function getNamespace()
 	{	
 		if (! isset($this->vendor) || $this->vendor == null) {
-			$namespace = "$this->project\\Starter\\Controller";
+			$namespace = "$this->project\\Starter\\Model";
 		
 		} else {
 			$namespace = "\\$this->vendor\\$this->module\\$this->object"; 
@@ -87,7 +68,7 @@ class Controller extends Base
 	 */
 	public function getFileName($name)
 	{
-		$file    = '%s'. DS .'starter'. DS .'controller'. DS .'%s.php'; 
+		$file    = '%s'. DS .'starter'. DS .'model'. DS .'%s.php'; 
 		$file    = sprintf($file, strtolower($this->project), ucfirst($name));
 		
 		return $file;

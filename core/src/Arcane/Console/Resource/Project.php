@@ -25,6 +25,8 @@ class Project extends Base
 		$this->generateControllers();
 
 		$this->generateView();
+
+		$this->generateModel();
 	}
 
 	/**
@@ -47,6 +49,24 @@ class Project extends Base
 		$args = ['type' => 'service'];
 
 		return $controller->setArgs($args)->summon();
+	}
+
+	/**
+	 * Generate all controller to the starter module
+	 * 
+	 * @return boolean
+	 */
+	public function generateModel()
+	{
+		$model = new Model();
+
+		$args = ['type' => 'model'];
+
+		return $model->setProject($this->project)
+				   		  ->setVendor($this->vendor)
+				   		  ->setModule($this->module)
+				   		  ->setArgs($args)
+				   		  ->summon();
 	}
 
 	/**

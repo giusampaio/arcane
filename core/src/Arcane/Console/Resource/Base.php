@@ -84,4 +84,20 @@ class Base
 	{
 		return $this->templateDir;
 	}
+
+	/**
+	 * Call specie of entity
+	 * @return void
+	 */
+	protected function call()
+	{
+		// check type of controller...
+		$type = (isset($this->args['type'])) ? $this->args['type'] : null;
+
+		// execute function by type...
+		if (method_exists($this, $type)) {
+			call_user_func_array([$this, $type], []);
+		}
+	}
+
 }
