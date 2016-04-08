@@ -45,7 +45,7 @@ class Request
 	{
 		try {
 			return $this->parseUrl('action', 4);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			return 'index';
 		}
 	}
@@ -58,9 +58,7 @@ class Request
 	 */
 	protected function parseUrl($item, $index)
 	{
-		if (isset($_GET[$item])) {
-			return $_GET[$item];
-		}
+		if (isset($_GET[$item])) return $_GET[$item];
 
 		$index++;
 

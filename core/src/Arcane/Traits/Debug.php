@@ -10,7 +10,7 @@ trait Debug
 	 * @param  [type] $msg [description]
 	 * @param  [type] $ip  [description]
 	 */
-	public function say($msg, $ip = null) {
+	public function say($msg, $dontDie = false, $ip = null) {
 		
 		if ( $ip != null && $_SERVER['REMOTE_ADDR'] != $ip ) return false; 
 
@@ -19,6 +19,9 @@ trait Debug
 		print($last .' said ');
 		print_r($msg);
 		print('</pre>');		
+
+		if ($dontDie == true ) return true;
+		
 		die();
 	}
 

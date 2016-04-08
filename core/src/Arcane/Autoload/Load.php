@@ -60,11 +60,6 @@ class Load
 		return is_file($file);
 	}
 
-	/**
-	 * [getModule description]
-	 * @param  [type] $module [description]
-	 * @return [type]         [description]
-	 */
 	public static function getModule($module = null)
 	{
 		$module = ( $module == null ) ? Request::getModule() : $module; 	
@@ -82,124 +77,67 @@ class Load
 		return new $namespace();
 	}
 
-	/**
-	 * [setPrefix description]
-	 * 
-	 * @param [type] $namespace [description]
-	 * @param [type] $base      [description]
-	 */
 	public static function setPrefix($namespace, $base)
 	{
 		self::$prefix[$namespace] = $base;
 	}
 	
-	
-	/**
-	 * [autoload description]
-	 * 
-	 * @param  [type] $class [description]
-	 * @return [type]        [description]
-	 */
 	private static function autoload($class)
 	{
-		$alias = self::getAliasNamespace($class);
-
-		$class = ($alias == false) ? $class : $alias;
-
 		self::setPrefix('Arcane',  ARCANE_PATH);
 		self::setPrefix('Default', ROOT_PATH);
 
-		if ( self::autoloadSimple($class) == true ) {
+		if ( self::autoloadStarter($class) == true ) {
 			return true;
 		}
 
-		if ( self::autoloadLowerCase($class) == true ) {
-			return true;
-		}
-
-		if ( self::autoloadPSR0($class) == true ) {
+		if ( self::autoloadModule($class) == true ) {
 			return true;
 		}
 	}
 
-	/**
-	 * [getAliasNamespace description]
-	 * 
-	 * @param  [type] $class [description]
-	 * @return [type]        [description]
-	 */
-	private static function getAliasNamespace($class)
+	private static function autoloadStarter($class) 
 	{
-		$alias['Model']      = 'Arcane\\Layers\\Model';
-		$alias['Controller'] = 'Arcane\\Layers\\Controller';
-
-		if ( isset($alias[$class]) ) {
-			return $alias[$class];
-		}
-
-		return false;
-	}
-
-
-	private static function autoloadSimple($class)
-	{
+		// Dismember namespace
 		$namespace = explode('\\', $class);
 
-		$class 	   = array_pop($namespace) . '.php';
-
-		$path      = strtolower(implode('\\', $namespace));
-
-		$fullPath  = ROOT_PATH . DS . $path . DS . $class;  
-
-		if(file_exists($fullPath)) {
-	 		require_once($fullPath);
-	 		return true;
-		}
-
-		return false;
-	}
-
-
-	/**
-	 *	Load files in lowercase structure directory
-	 *	
-	 * @param  string $class Class with namespace 
-	 * @return bool 
-	 */
-	private static function autoloadLowerCase($class) 
-	{
-		$namespace = explode('\\', $class);
-		$class 	   = array_pop($namespace) . '.php';
-
-		$path      = strtolower(implode('\\', $namespace));
-		$file 	   = str_replace("\\", DS, $path . DS . $class);
-
-		foreach (self::$prefix as $base) {
-
-			$fullPath = $base . $file;
-
-			if( file_exists($fullPath) ) {
-		 		require_once($fullPath);
-		 		return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * [autoloadPSR0 description]
-	 * @param  [type] $class [description]
-	 * @return [type]        [description]
-	 */
-	private static function autoloadPSR0($class) 
-	{
-		$namespace = explode('\\', $class);
+		// Get only name class adding .php
 		$class 	   = ucfirst(array_pop($namespace)) . '.php';
 
-		$path      = implode('\\', $namespace);
-		$file 	   = str_replace("\\", DS, $path . DS . $class);
+		// Mount file name and path name
+		$path = strtolower(implode('\\', $namespace));
+		$file = str_replace("\\", DS, $path . DS . $class);
 
+		foreach (self::$prefix as $namespaceBase => $base) {
+
+			$fullPath = $base . DS . $file; 	
+			//print('<br/> PSR0 '. $fullPath);
+
+			if ( is_file($fullPath) ) {
+		 		require_once($fullPath);
+		 		return true;
+			} 	 	
+		}
+
+		return false;
+	}
+
+	private static function autoloadModule($class) 
+	{
+		// Dismember namespace
+		$namespace = explode('\\', $class);
+
+		if (! isset($namespace[1]) || $namespace[1] == 'Starter') return false;
+
+		// Get only name class adding .php
+		$class   = ucfirst(array_pop($namespace)) . '.php';
+		$project = array_shift($namespace);
+		$path    = $project .'\\modules\\'. implode('\\', $namespace);
+
+		// Mount file name and path name
+		$path = strtolower($path);
+		$file = $path . DS . $class;
+		
 		foreach (self::$prefix as $namespaceBase => $base) {
 
 			$fullPath = $base . DS . $file; 	

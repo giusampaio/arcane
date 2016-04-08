@@ -4,7 +4,6 @@ namespace Arcane\Layers;
 
 use Arcane\Layers\View;
 use Arcane\Http\Request;
-use Aura\Router\RouterContainer;
 
 class Controller
 {
@@ -13,11 +12,14 @@ class Controller
 
 	protected $router;
 
+	protected $assetsDir;
+
 	/**
 	 * Check function endcuts
 	 * 
-	 * @param  string $method [description]
-	 * @param  string $args   [description]
+	 * @param  string $method 
+	 * @param  string $args   
+	 * @return mixed
 	 */
 	public function __call($method, $args)
 	{
@@ -26,11 +28,44 @@ class Controller
 	}
 
 	/**
-	 * [resources description]
-	 * @param  [type] $obj [description]
-	 * @return [type]      [description]
+	 * Get base dir from controller
+	 * 
+	 * @return string
 	 */
-	protected function _resources($obj)
+	protected function relativeDir()
+	{
+		// Get who invoke this function
+		$class  = get_class($this);
+		$pieces = explode('\\', $class);
+
+		$dir = strtolower(implode('/', $pieces));
+
+		return dirname($dir) . DS;
+	}
+
+	/**
+	 * Get base dir from controller
+	 * 
+	 * @return string
+	 */
+	protected function absoluteDir()
+	{
+		// Get who invoke this function
+		$class  = get_class($this);
+		$pieces = explode('\\', $class);
+
+		$reflector = new \ReflectionClass($class);
+		$dir      = $reflector->getFileName();
+		
+		return dirname($dir) . DS;
+	}
+
+	/**
+	 * Execute actions by function name on controller
+	 * 
+	 * @return mixed
+	 */
+	protected function _actions()
 	{
 		$req = new Request();
 
@@ -38,26 +73,94 @@ class Controller
 
 		if ($action == null) return false;
 
-		if (! is_object($obj)) return false;
+		if (! is_object($this)) return false;
 
-		if (! method_exists($obj, $action)) return false;
+		if (! method_exists($this, $action)) return false;
 
-		return call_user_func_array([$obj, $action], []);	
+		return call_user_func_array([$this, $action], []);	
 	}
 
 	/**
+	 * Get a instance of view with template and file setted
 	 * 
-	 * @return 
+	 * @return View
 	 */
 	public function view($tpl)
 	{
-		// Template path of controller 
-		$path = dirname(get_class($this)) . DS . 'view';
+		$path = $this->absoluteDir() .'view';
 
 		// Get a view layer
 		$view = new View();
 
 		// Set path and return Mustache object
 		return $view->path($path)->get($tpl);
+	}
+
+	/**
+	 * Set assets path controller
+	 * 
+	 * @return this
+	 */
+	public function assets()
+	{
+		$this->assetsDir = $this->relativeDir() . 'assets';
+		
+		return $this;
+	}
+
+	/**
+	 * Generate paths to create css
+	 * 
+	 * @param  array $files Files CSS
+	 * @return array       
+	 */
+	public function css($files)
+	{
+		$css = [];
+
+		foreach ($files as $file) {
+			$path = str_replace('\\', '/', $this->assetsDir);
+			$css[] =  $path .'/css' . $file;
+		}	
+
+		return $css;
+	}
+
+	/**
+	 * Generate paths to create css
+	 * 
+	 * @param  array $files Files CSS
+	 * @return array       
+	 */
+	public function js($files)
+	{
+		$js = [];
+
+		foreach ($files as $file) {
+			$path = str_replace('\\', '/', $this->assetsDir);
+			$js[] =  $path .'/js' . $file;
+		}	
+
+		return $js;
+	}
+
+
+	/**
+	 * Get a module object 
+	 * 
+	 * @param  
+	 * @return 
+	 */
+	public function module($module) 
+	{
+		$request = new Request();	
+		$project = ucfirst($request->project());
+
+		$pieces = explode('\\', $module);
+		$class  = $pieces[1];
+
+		$namespace = $project .'\\'. $pieces[0] .'\\'. $class .'\\'. $class;
+
+		return new $namespace(); 
 	}
 }

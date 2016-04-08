@@ -7,8 +7,8 @@ use ReflectionClass;
 trait Event
 {
     /**
-     * [$before description]
-     * @var [type]
+     * List of hooks to executed
+     * @var array
      */
     private static $before;
 
@@ -26,22 +26,30 @@ trait Event
             return false;
         }
 
-        $ret = call_user_func_array(array($this, $actualMethod), $args);
+        $before = $this->executeBefore($method);
+        $main   = call_user_func_array(array($this, $actualMethod), $args);
 
-        $ret .= $this->executeBefore($method);
+        if (is_array($main)) {
+            $main[] = $before; 
+        } else {
+            $main = $before . $main;
+        }
 
-        return $ret;
+        return $main;
     }
 
     /**
-     * [before description]
-     * @param  [type] $hook     [description]
-     * @param  [type] $obj      [description]
-     * @param  [type] $function [description]
-     * @return [type]           [description]
+     * Add a function to executed before than other function
+     * @param  string $hook     Function name to be hooked
+     * @param  mixed  $obj      Class name to be executed
+     * @param  string $function Function to be executed
      */
     public static function before($hook, $obj, $method)
     {
+        if ( is_object($obj) ) {
+            $obj = get_class($obj);
+        }
+
         self::$before[$hook] = ['obj' => $obj, 'method' => $method];
     }
 
@@ -56,8 +64,8 @@ trait Event
         $class  = '\\'. self::$before[$hook]['obj'];
         $method = self::$before[$hook]['method'];
 
-        $obj = new  $class();
+        $obj = new $class();
 
-        $obj->$method();
+        return $obj->$method();
     }
 }

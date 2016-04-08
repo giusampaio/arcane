@@ -2,8 +2,8 @@
 
 namespace Arcane\Layers;
 
-use Arcane\Model\Schema;
-use Arcane\Model\Database;
+use Arcane\Database\Schema;
+use Arcane\Database\Database;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Model extends Eloquent
