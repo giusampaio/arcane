@@ -43,7 +43,7 @@ class Controller extends Base
 	 */
 	public function service()
 	{
-		$namespace = $this->getNamespace();
+		$namespace = $this->getNamespace('controller');
 
 		// Path to find controller service template
 		$tpl  = $this->templateDir. DS .'Controllers'. DS .'Controller.tpl';
@@ -55,41 +55,11 @@ class Controller extends Base
 		$vars = ['nameController' => $nameController, 'namespace' => $namespace];
 		
 		// get file name to the new controller
-		$file = $this->getFileName($nameController);
+		$file = $this->getFileName($nameController, 'controller');
 
 		// get content of template file
 		$content = $this->fopenReplace($tpl, $vars);
 	
 		$this->fopenWrite($file, $content);
-	}
-
-	/**
-	 * Recover namespace for service controller
-	 * 
-	 * @return string
-	 */
-	public function getNamespace()
-	{	
-		if (! isset($this->vendor) || $this->vendor == null) {
-			$namespace = "$this->project\\Starter\\Controller";
-		
-		} else {
-			$namespace = "\\$this->vendor\\$this->module\\$this->object"; 
-		}
-
-		return $namespace;
-	} 
-
-	/**
-	 * Return file name to project 
-	 * 
-	 * @return string
-	 */
-	public function getFileName($name)
-	{
-		$file    = '%s'. DS .'starter'. DS .'controller'. DS .'%s.php'; 
-		$file    = sprintf($file, strtolower($this->project), ucfirst($name));
-		
-		return $file;
-	}	
+	} 	
 }

@@ -1,24 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{#loadCSS}}
+    <link rel="stylesheet" type="text/css" href="{{.}}" />
+    {{/loadCSS}}
 
-    <title>{{getTitle}} </title>
-
-    {{#css}}
-    <link href="{{fileCSS}}" rel="stylesheet">
-    {{/css}}
-
+    {{#loadFonts}}
+    <link rel="stylesheet" type="text/css" href="panel/starter/assets/{{.}}" />
+    {{/loadFonts}}
   </head>
 
-  <body>
-	
-    {{getContent}}	
-    
-    {{#js}}
-    <script src="{{fileJS}}"></script>
-    {{/js}}
+  {{{getContent}}}
 
-  </body>
+  {{#loadJS}}
+  <script type="text/javascript" src="{{.}}"></script>
+  {{/loadJS}}
+
 </html>

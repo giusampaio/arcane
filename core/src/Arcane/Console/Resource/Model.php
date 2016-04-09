@@ -13,7 +13,7 @@ class Model extends Base
 	 */
 	public function summon()
 	{
-		$this->call();
+		$this->model();
 	}
 
 
@@ -24,7 +24,7 @@ class Model extends Base
 	 */
 	public function model()
 	{
-		$namespace = $this->getNamespace();
+		$namespace = $this->getNamespace('model');
 
 		// Path to find controller service template
 		$tpl  = $this->templateDir. DS .'Models'. DS .'Model.tpl';
@@ -35,8 +35,8 @@ class Model extends Base
 		// args to send to handler replace on template
 		$vars = ['nameModel' => $nameModel, 'namespace' => $namespace];
 		
-		// get file name to the new controller
-		$file = $this->getFileName($nameModel);
+		// get file name to the new model
+		$file = $this->getFileName($nameModel, 'model');
 
 		// get content of template file
 		$content = $this->fopenReplace($tpl, $vars);
@@ -44,33 +44,4 @@ class Model extends Base
 		$this->fopenWrite($file, $content);
 	}
 
-	/**
-	 * Recover namespace for service controller
-	 * 
-	 * @return string
-	 */
-	public function getNamespace()
-	{	
-		if (! isset($this->vendor) || $this->vendor == null) {
-			$namespace = "$this->project\\Starter\\Model";
-		
-		} else {
-			$namespace = "\\$this->vendor\\$this->module\\$this->object"; 
-		}
-
-		return $namespace;
-	} 
-
-	/**
-	 * Return file name to project 
-	 * 
-	 * @return string
-	 */
-	public function getFileName($name)
-	{
-		$file    = '%s'. DS .'starter'. DS .'model'. DS .'%s.php'; 
-		$file    = sprintf($file, strtolower($this->project), ucfirst($name));
-		
-		return $file;
-	}	
 }

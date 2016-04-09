@@ -77,6 +77,18 @@ class Base
 		return $this;
 	}
 
+
+	/**
+	 * Set project name
+	 * @param [type] $name [description]
+	 */
+	public function setObject($fields)
+	{
+		$this->object = $fields;
+
+		return $this;
+	}
+
 	/**
 	 * 
 	 */
@@ -100,4 +112,46 @@ class Base
 		}
 	}
 
+	/**
+	 * Return file name to project 
+	 * 
+	 * @return string
+	 */
+	public function getFileName($name, $type)
+	{
+		if (! isset($this->vendor) || $this->vendor == null) {
+
+			$file = '%s'. DS .'starter'. DS . $type . DS .'%s.php'; 
+			$file = sprintf($file, strtolower($this->project), ucfirst($name));
+			
+		} else {
+
+			$dir = 'modules' . DS . $this->vendor . DS . $this->module;
+
+			$file = '%s'. DS .'%s'. DS . '' . $type . DS .'%s.php'; 
+			$file = sprintf($file, strtolower($this->project), strtolower($dir), ucfirst($name));
+		}
+
+		return $file;
+	}
+
+	
+	/**
+	 * Recover namespace for service controller
+	 * 
+	 * @return string
+	 */
+	public function getNamespace($type)
+	{	
+		$type = ucfirst($type);
+
+		if (! isset($this->vendor) || $this->vendor == null) {
+			$namespace = "$this->project\\Starter\\". $type;
+		
+		} else {
+			$namespace = "$this->project\\$this->vendor\\$this->module\\". $type; 
+		}
+
+		return $namespace;
+	}
 }

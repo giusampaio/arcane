@@ -78,6 +78,9 @@ class Terminal
 		 return $this->error('Name given invalid');
 		}
 
+		// Interpreta os argumentos passados
+		$this->parseArgs($args);
+
 		// Se tudo estiver OK, chama a entidade em questão
 		$entity = $this->callEntity();
 
@@ -152,7 +155,7 @@ class Terminal
 	 */
 	private function parseNamespace($namespace)
 	{
-		$pieces = explode('.', $name);
+		$pieces = explode('.', $namespace);
 		$this->vendor = $pieces[0];
 		$this->module =	$pieces[1];
 
@@ -161,6 +164,29 @@ class Terminal
 		}
 
 		return true;
+	}
+
+	
+	private function parseArgs($args)
+	{
+		if ( ! isset($args[3]) ) return false;
+
+		unset($args[0]);
+		unset($args[1]);
+		unset($args[2]);
+
+		$key = null;
+
+		foreach ($args as $arg) {
+
+			// Checa se começa com --, indicando a chave do argumento
+			if ( preg_match("/^--/", $arg) ) {
+				$key = str_replace('--', '', $arg);
+				continue;
+			}
+
+			$this->args[$key] = $arg;
+		}
 	}
 
 	/**

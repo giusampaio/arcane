@@ -14,7 +14,7 @@ class Project extends Base
 	 */
 	public function summon()
 	{
-		if ($this->hasProject($this->project)) {
+		if ($this->has($this->project)) {
 			throw new \Exception("There's a project with that name.", 1);
 		}
 
@@ -123,7 +123,7 @@ class Project extends Base
 	 * @param  string  $project Name project case insentive
 	 * @return boolean          
 	 */
-	public function hasProject($project)
+	public function has($project)
 	{
 		return (is_dir(strtolower($project)));
 	}
