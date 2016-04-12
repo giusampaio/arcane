@@ -185,7 +185,7 @@ class Terminal
 				continue;
 			}
 
-			$this->args[$key] = $arg;
+			$this->args[$key][] = $arg;
 		}
 	}
 

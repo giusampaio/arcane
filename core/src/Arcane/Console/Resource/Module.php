@@ -17,15 +17,15 @@ class Module extends Base
 	public function summon()
 	{
 		if ( ! isset($this->args['project']) ) {
-			throw new Exception("Project not defined.", 1);
+			throw new \Exception("Project not defined.", 1);
 		}
 
-		$name = $this->args['project'];
+		$name = $this->args['project'][0];
 
 		$project = new Project();
 
-		if ( ! $project->has($name) ) {
-			throw new Exception("Project don't exists.", 1);
+		if ( ! $project->exists($name) ) {
+			throw new \Exception("Project don't exists.", 1);
 		}
 
 		$this->setProject($name);
@@ -62,7 +62,9 @@ class Module extends Base
 	{
 		$controller = new Controller();
 
-		$args = ['type' => 'service'];
+		$up = ( isset($this->args['up']) ) ? $this->args['up'] : null;
+
+		$args = ['type' => 'service', 'up' => $up];
 
 		return $controller->setProject($this->project)
 				   		  ->setVendor($this->vendor)
@@ -70,8 +72,6 @@ class Module extends Base
 				   		  ->setObject($this->module)
 				   		  ->setArgs($args)
 				   		  ->summon();
-
-		//return $controller->setArgs($args)->summon();
 	}
 
 	/**

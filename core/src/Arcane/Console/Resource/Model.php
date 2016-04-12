@@ -27,21 +27,51 @@ class Model extends Base
 		$namespace = $this->getNamespace('model');
 
 		// Path to find controller service template
-		$tpl  = $this->templateDir. DS .'Models'. DS .'Model.tpl';
+		$tpl  = $this->getTemplateFile('model');
 
-		//If not a vendor, trait like a config starter controller...
+		//If not a vendor, trait like a config starter model...
 		$nameModel = ($this->vendor != null) ? $this->object : 'Config';
 		
+		// Get a ups to enchart to model class
+		$up = $this->getUp();
+
 		// args to send to handler replace on template
-		$vars = ['nameModel' => $nameModel, 'namespace' => $namespace];
-		
-		// get file name to the new model
-		$file = $this->getFileName($nameModel, 'model');
+		$vars = ['nameModel' => $nameModel, 
+				 'namespace' => $namespace,
+				 'table'	 => strtolower($nameModel),	
+				 'up'		 => $up];
 
 		// get content of template file
 		$content = $this->fopenReplace($tpl, $vars);
+		
+		// get file name to the new model
+		$file = $this->getFileName($nameModel, 'model');
 	
 		$this->fopenWrite($file, $content);
 	}
 
+	/**
+	 * 
+	 * 
+	 * @return array
+	 */
+	public function getUp()
+	{
+		if (! isset($this->args['up'])) return null;
+
+		$up = '';
+
+		foreach ($this->args['up'] as $arg) {
+
+			$pieces = explode('.', $arg);
+
+			$field    = $pieces[0]; 	
+			$function = $pieces[1];
+
+			$up .= PHP_EOL . '                            '; 
+			$up .= '->'. $function . "('" . $field . "')";	
+		}
+		
+		return $up;
+	}
 }

@@ -9,6 +9,8 @@ class Controller
 {
 	use \Arcane\Traits\Event;
 	use \Arcane\Traits\Debug;
+	use \Arcane\Traits\Resource;
+	use \Arcane\Traits\Directory;
 
 	protected $router;
 
@@ -26,39 +28,7 @@ class Controller
 		// Call method for events trait 	
 		return $this->listen($method, $args);
 	}
-
-	/**
-	 * Get base dir from controller
-	 * 
-	 * @return string
-	 */
-	protected function relativeDir()
-	{
-		// Get who invoke this function
-		$class  = get_class($this);
-		$pieces = explode('\\', $class);
-
-		$dir = strtolower(implode('/', $pieces));
-
-		return dirname($dir) . DS;
-	}
-
-	/**
-	 * Get base dir from controller
-	 * 
-	 * @return string
-	 */
-	protected function absoluteDir()
-	{
-		// Get who invoke this function
-		$class  = get_class($this);
-		$pieces = explode('\\', $class);
-
-		$reflector = new \ReflectionClass($class);
-		$dir      = $reflector->getFileName();
-		
-		return dirname($dir) . DS;
-	}
+	
 
 	/**
 	 * Execute actions by function name on controller
@@ -85,8 +55,14 @@ class Controller
 	 * 
 	 * @return View
 	 */
-	public function view($tpl)
+	public function view($tpl = null)
 	{
+		// 	
+		if (! isset($tpl) || $tpl == null) {
+			return false; 
+		}
+
+		// 
 		$path = $this->absoluteDir() .'view';
 
 		// Get a view layer
@@ -97,53 +73,22 @@ class Controller
 	}
 
 	/**
-	 * Set assets path controller
+	 * Generate paths to create css
 	 * 
-	 * @return this
+	 * @param  array $files Files CSS
+	 * @return array       
 	 */
-	public function assets()
+	public function assets(string $type, array $files)
 	{
 		$this->assetsDir = $this->relativeDir() . 'assets';
-		
-		return $this;
-	}
-
-	/**
-	 * Generate paths to create css
-	 * 
-	 * @param  array $files Files CSS
-	 * @return array       
-	 */
-	public function css($files)
-	{
-		$css = [];
 
 		foreach ($files as $file) {
 			$path = str_replace('\\', '/', $this->assetsDir);
-			$css[] =  $path .'/css' . $file;
+			$files[] =  $path . '/'. $type . $file;
 		}	
 
-		return $css;
+		return $files;
 	}
-
-	/**
-	 * Generate paths to create css
-	 * 
-	 * @param  array $files Files CSS
-	 * @return array       
-	 */
-	public function js($files)
-	{
-		$js = [];
-
-		foreach ($files as $file) {
-			$path = str_replace('\\', '/', $this->assetsDir);
-			$js[] =  $path .'/js' . $file;
-		}	
-
-		return $js;
-	}
-
 
 	/**
 	 * Get a module object 
@@ -151,16 +96,16 @@ class Controller
 	 * @param  
 	 * @return 
 	 */
-	public function module($module) 
+	public function module($module = null) 
 	{
-		$request = new Request();	
-		$project = ucfirst($request->project());
+		if ($module == '*') {
+			return $this->allModules();
 
-		$pieces = explode('\\', $module);
-		$class  = $pieces[1];
-
-		$namespace = $project .'\\'. $pieces[0] .'\\'. $class .'\\'. $class;
-
-		return new $namespace(); 
+		} elseif ($module != null) {
+			return $this->singleModule($module);
+		
+		} else {
+			return $this->currentModule();
+		}
 	}
 }

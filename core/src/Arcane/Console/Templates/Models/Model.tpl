@@ -8,7 +8,7 @@ class {{nameModel}} extends Model
 {
 	public function __construct()
 	{
-		$this->schema = new Schema();
+		parent::__construct();
 	}
 
 	/**
@@ -17,7 +17,7 @@ class {{nameModel}} extends Model
 	 */
 	public function up()
 	{
-
+		return $this->schema->table('{{table}}'){{up}};
 	}
 
 	/**
@@ -26,6 +26,6 @@ class {{nameModel}} extends Model
 	 */
 	public function down()
 	{
-
+		
 	}
 }

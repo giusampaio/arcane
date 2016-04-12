@@ -22,6 +22,10 @@ class Model extends Eloquent
 	 */
 	protected $schema;
 
+	/**
+	 * 
+	 * @var boolean
+	 */
 	public $timestamps  = false;
 
 	/**
@@ -32,6 +36,7 @@ class Model extends Eloquent
 		$this->connectDatabase();
 
 		$this->schema = new Schema();
+		
 		$this->schema->setConnection($this->db);
 	}
 

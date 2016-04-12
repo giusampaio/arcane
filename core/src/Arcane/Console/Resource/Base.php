@@ -30,7 +30,10 @@ class Base
 	 */
 	protected $project;
 
-
+	/**
+	 * Directory base for template files
+	 * @var string
+	 */
 	protected $templateDir = ARCANE_PATH . DS . 'Console' . DS . 'Templates';
 
 	/**
@@ -153,5 +156,19 @@ class Base
 		}
 
 		return $namespace;
+	}
+
+	/**
+	 * Get a template file in accord by type
+	 * @return string
+	 */
+	public function getTemplateFile($type)
+	{
+		$type = ucfirst($type);
+
+		// Path to find controller service template
+		$tpl  = $this->templateDir. DS . $type . 's'. DS . $type . '.tpl';
+
+		return $tpl;
 	}
 }

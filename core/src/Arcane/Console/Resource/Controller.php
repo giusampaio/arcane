@@ -50,9 +50,19 @@ class Controller extends Base
 
 		//If not a vendor, trait like a config starter controller...
 		$nameController = ($this->vendor != null) ? $this->object : 'Config';
+
+		//
+		$model = $this->getNamespace('model') . '\\' . ucfirst($nameController);
+
+		//
+		$saveController = $this->getUp($nameController);
 		
 		// args to send to handler replace on template
-		$vars = ['nameController' => $nameController, 'namespace' => $namespace];
+		$vars = ['nameController' => $nameController, 
+				 'varController'  => strtolower($nameController),
+				 'namespaceModel' => $model,
+				 'namespace' 	  => $namespace,
+				 'saveController' => $saveController];
 		
 		// get file name to the new controller
 		$file = $this->getFileName($nameController, 'controller');
@@ -60,6 +70,34 @@ class Controller extends Base
 		// get content of template file
 		$content = $this->fopenReplace($tpl, $vars);
 	
+		// Create file
 		$this->fopenWrite($file, $content);
 	} 	
+
+	/**
+	 * 
+	 * 
+	 * @return string
+	 */
+	public function getUp($model)
+	{
+		if (! isset($this->args['up']) || $this->args['up'] == null) {
+			return null;
+		}
+
+		$up = '';
+
+		foreach ($this->args['up'] as $arg) {
+
+			$pieces = explode('.', $arg);
+
+			$field    = $pieces[0]; 	
+			$function = $pieces[1];
+
+			$up .= PHP_EOL . '        '; 
+			$up .= '$' . strtolower($model) .'->'. $field . ' = $this->post(\''. $field ."');";	
+		}
+
+		return $up;
+	}
 }

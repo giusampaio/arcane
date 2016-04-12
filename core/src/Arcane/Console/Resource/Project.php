@@ -123,7 +123,7 @@ class Project extends Base
 	 * @param  string  $project Name project case insentive
 	 * @return boolean          
 	 */
-	public function has($project)
+	public function exists($project)
 	{
 		return (is_dir(strtolower($project)));
 	}

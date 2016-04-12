@@ -3,81 +3,133 @@
 namespace {{namespace}};
 
 use Arcane\Layers\Controller;
+use {{namespaceModel}};
 
 class {{nameController}} extends Controller
 {
 
-	/**
-     * [index description]
+    /**
+     * Model {{nameController}} instance 
      * 
-     * @return [type] [description]
+     * @var {{namespaceModel}}
+     */
+    private $model;
+
+    /**
+     * 
+     */
+    public function __construct()
+    {
+        $this->model = new {{nameController}}();
+    }
+
+	/**
+     * Render the table with all {{nameController}}s
+     * 
+     * @return html
      */
     public function index()
     {
-        //
+        $view = $this->view('index');
+            
+        ${{varController}}s = $this->model->all();
+
+        return $view->render(['{{varController}}' => ${{varController}}s]);
+    }
+
+    /**
+     * Render the page for show {{nameController}} data
+     * 
+     * @param  int $id 
+     * @return html
+     */
+    public function show()
+    {
+        $view = $this->view('show');
+        
+        $id = $this->get('id');
+
+        ${{varController}} = $this->model->find($id);
+
+        return $view->render(${{varController}}); 
     }
 
 	/**
-     * [create description]
+     * Render the form to create a new {{nameController}}
      * 
-     * @return [type] [description]
+     * @return html
      */
     public function create()
     {
-        //
+        $view = $this->view('form');
+
+        if ( $this->post()->exists() ) {
+            return $this->save($id);
+        }
+
+        return $view->render();    
     }
 
     /**
-     * [save description]
+     * Render the form to edit a specified {{nameController}}
      * 
-     * @return [type] [description]
+     * @param  int $id {{nameController}} id
+     * @return html
      */
-    public function save()
+    public function edit()
     {
-        //
+        $view = $this->view('form');
+
+        $id = $this->get('id');
+
+        if ( $this->post()->exists() ) {
+            return $this->save($id);
+        }
+
+        ${{varController}} = $this->model->find($id);
+
+        return $view->render(${{varController}});    
     }
 
     /**
-     * [view description]
+     * Auxiliar function to validate data
      * 
-     * @param  [type] $id [description]
-     * @return [type]     [description]
+     * @return boolean
      */
-    public function view($id)
+    protected function validate() 
     {
-        //
+        return true;
     }
 
     /**
-     * [edit description]
+     * Validate and create a new {{nameController}} on database
      * 
-     * @param  [type] $id [description]
-     * @return [type]     [description]
+     * @return boolean
      */
-    public function edit($id)
-    {
-        //
-    }
+    protected function save($id)
+    {   
+        if ( ! $this->validate() ) {
+            return $this->router()->back();
+        }
+
+        ${{varController}} = $this->model->find($id);
+        {{saveController}}
+        ${{varController}}->save();
+
+        return $this->router()->go('/index');
+    }	
 
     /**
-     * [update description]
+     * Function to delete a {{nameController}}
      * 
-     * @param  [type] $id [description]
-     * @return [type]     [description]
+     * @param  int $id {{nameController}} id
+     * @return boolean
      */
-    public function update($id)
+    protected function delete($id)
     {
         //
-    } 	
+        ${{varController}} = $this->model->find($id);
 
-    /**
-     * [delete description]
-     * 
-     * @param  [type] $id [description]
-     * @return [type]     [description]
-     */
-    public function delete($id)
-    {
-        //
+        return ${{varController}}->delete();
     }
 }
