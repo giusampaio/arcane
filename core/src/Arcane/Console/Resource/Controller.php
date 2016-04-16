@@ -49,30 +49,84 @@ class Controller extends Base
 		$tpl  = $this->templateDir. DS .'Controllers'. DS .'Controller.tpl';
 
 		//If not a vendor, trait like a config starter controller...
-		$nameController = ($this->vendor != null) ? $this->object : 'Config';
+		$controllerName = ($this->vendor != null) ? $this->object : 'Config';
 
 		//
-		$model = $this->getNamespace('model') . '\\' . ucfirst($nameController);
+		$model = $this->getNamespace('model') . '\\' . ucfirst($controllerName);
 
 		//
-		$saveController = $this->getUp($nameController);
+		$saveController = $this->getUp($controllerName);
 		
 		// args to send to handler replace on template
-		$vars = ['nameController' => $nameController, 
-				 'varController'  => strtolower($nameController),
+		$vars = ['controllerName' => $controllerName, 
+				 'varController'  => strtolower($controllerName),
 				 'namespaceModel' => $model,
 				 'namespace' 	  => $namespace,
 				 'saveController' => $saveController];
 		
 		// get file name to the new controller
-		$file = $this->getFileName($nameController, 'controller');
+		$file = $this->getFileName($controllerName, 'controller');
 
 		// get content of template file
 		$content = $this->fopenReplace($tpl, $vars);
 	
 		// Create file
 		$this->fopenWrite($file, $content);
-	} 	
+	} 
+
+	/**
+	 * 
+	 * @return [type] [description]
+	 */
+	public function module()
+	{
+		// Path to find controller service template
+		$tpl  = $this->templateDir . DS .'Controllers'. DS .'Module.tpl';
+
+		// If not a vendor, trait like a config starter controller...
+		$controllerName = ($this->vendor != null) ? $this->object : 'Module';
+
+		// Get a module namespace
+		$moduleNamespace = $this->getModuleNamespace();
+
+		// 
+		$action = $this->getNamespace('controller') .'\\' . $this->module;
+
+		//
+		$saveController = $this->getUp($controllerName);
+		
+		// args to send to handler replace on template
+		$vars = ['moduleNamespace'  => $moduleNamespace, 
+				 'actionNamespace'  => $action];
+		
+
+		$file = strtolower($this->project . DS . 'modules' . DS . 
+				$this->vendor . DS . $this->module) . DS . 'Module.php'; 
+
+		// get content of template file
+		$content = $this->fopenReplace($tpl, $vars);
+	
+		// Create file
+		$this->fopenWrite($file, $content);	
+	}
+
+	/**
+	 * Get a module controller namespace
+	 * 
+	 * @return string
+	 */
+	public function getModuleNamespace()
+	{
+		$namespace = $this->getNamespace('controller');
+
+		$moduleNamespace = explode('\\', $namespace);
+
+		array_pop($moduleNamespace);
+
+		$moduleNamespace = implode('\\', $moduleNamespace);
+
+		return $moduleNamespace;
+	}
 
 	/**
 	 * 
@@ -95,7 +149,7 @@ class Controller extends Base
 			$function = $pieces[1];
 
 			$up .= PHP_EOL . '        '; 
-			$up .= '$' . strtolower($model) .'->'. $field . ' = $this->post(\''. $field ."');";	
+			$up .= '$' . strtolower($model) .'->'. $field . ' = $post[\''. $field ."'];";	
 		}
 
 		return $up;

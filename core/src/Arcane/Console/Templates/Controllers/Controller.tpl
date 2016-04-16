@@ -5,11 +5,11 @@ namespace {{namespace}};
 use Arcane\Layers\Controller;
 use {{namespaceModel}};
 
-class {{nameController}} extends Controller
+class {{controllerName}} extends Controller
 {
 
     /**
-     * Model {{nameController}} instance 
+     * Model {{controllerName}} instance 
      * 
      * @var {{namespaceModel}}
      */
@@ -20,11 +20,11 @@ class {{nameController}} extends Controller
      */
     public function __construct()
     {
-        $this->model = new {{nameController}}();
+        $this->model = new {{controllerName}}();
     }
 
 	/**
-     * Render the table with all {{nameController}}s
+     * Render the table with all {{controllerName}}s
      * 
      * @return html
      */
@@ -38,7 +38,7 @@ class {{nameController}} extends Controller
     }
 
     /**
-     * Render the page for show {{nameController}} data
+     * Render the page for show {{controllerName}} data
      * 
      * @param  int $id 
      * @return html
@@ -55,7 +55,7 @@ class {{nameController}} extends Controller
     }
 
 	/**
-     * Render the form to create a new {{nameController}}
+     * Render the form to create a new {{controllerName}}
      * 
      * @return html
      */
@@ -71,9 +71,9 @@ class {{nameController}} extends Controller
     }
 
     /**
-     * Render the form to edit a specified {{nameController}}
+     * Render the form to edit a specified {{controllerName}}
      * 
-     * @param  int $id {{nameController}} id
+     * @param  int $id {{controllerName}} id
      * @return html
      */
     public function edit()
@@ -102,7 +102,7 @@ class {{nameController}} extends Controller
     }
 
     /**
-     * Validate and create a new {{nameController}} on database
+     * Validate and create a new {{controllerName}} on database
      * 
      * @return boolean
      */
@@ -112,7 +112,10 @@ class {{nameController}} extends Controller
             return $this->router()->back();
         }
 
+        $post = $this->post('{{varController}}');
+
         ${{varController}} = $this->model->find($id);
+
         {{saveController}}
         ${{varController}}->save();
 
@@ -120,9 +123,9 @@ class {{nameController}} extends Controller
     }	
 
     /**
-     * Function to delete a {{nameController}}
+     * Function to delete a {{controllerName}}
      * 
-     * @param  int $id {{nameController}} id
+     * @param  int $id {{controllerName}} id
      * @return boolean
      */
     protected function delete($id)

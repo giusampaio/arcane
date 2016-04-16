@@ -35,6 +35,8 @@ class Module extends Base
 		$this->generateController();
 
 		$this->generateModel();
+
+		$this->generateViews();
 	}
 
 	/**
@@ -66,12 +68,17 @@ class Module extends Base
 
 		$args = ['type' => 'service', 'up' => $up];
 
-		return $controller->setProject($this->project)
-				   		  ->setVendor($this->vendor)
-				   		  ->setModule($this->module)
-				   		  ->setObject($this->module)
-				   		  ->setArgs($args)
-				   		  ->summon();
+		$controller->setProject($this->project)
+				   	->setVendor($this->vendor)
+				   	->setModule($this->module)
+				   	->setObject($this->module)
+				   	->setArgs($args)
+				   	->summon();
+
+
+		$args = ['type' => 'module'];
+
+		return $controller->setArgs($args)->summon();
 	}
 
 	/**
@@ -91,4 +98,20 @@ class Module extends Base
 				   	 ->summon();
 	}
 
+	/**
+	 * Generate all views to the module
+	 * 
+	 * @return boolean
+	 */
+	public function generateViews()
+	{
+		$view = new View();
+
+		return $view->setProject($this->project)
+				   	 ->setVendor($this->vendor)
+				   	 ->setModule($this->module)
+				   	 ->setObject($this->module)
+				   	 ->setArgs($this->args)
+				   	 ->form();	
+	}
 }

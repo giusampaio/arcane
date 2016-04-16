@@ -7,23 +7,52 @@ use {{projectName}}\Starter\Controllers\Content;
 
 class Index extends Controller
 {
-
+	/**
+	 * View file from {{projectName}}
+	 * 
+	 * @var string
+	 */
 	public $layout = 'layout';
 
+	/**
+	 * List with all modules installed on {{projectName}}
+	 * 
+	 * @var array
+	 */
+	private $modules = [];
 
+	/**
+	 * 
+	 */
+	public function __construct()
+	{
+		$this->modules = $this->module('*');
+	}
+
+	/**
+	 * Return title browser title 
+	 * 
+	 * @return string
+	 */
 	public function getTitle()
 	{
 		return 'Welcome to the starter';
 	}
 
 	/**
-	 * Endcut for rotines before processing a page
+	 * Function to get all CSS files on project
 	 *	
 	 * @return mixed 
 	 */
 	public function css()
 	{
-		return [];
+		$files   = [];
+
+		foreach ($this->modules as $module) {
+			$files[] = $module->css();
+		}
+
+		return $this->assets('css', $files);
 	}
 
 	/**
@@ -37,12 +66,18 @@ class Index extends Controller
 	}
 
 	/**
-	 * Endcut for rotines before processing a page
+	 * Function to get all JS files on project
 	 *	
 	 * @return mixed 
 	 */
 	public function js()
 	{
-		return [];
+		$files   = [];
+
+		foreach ($this->modules as $module) {
+			$files[] = $module->js();
+		}
+
+		return $this->assets('js', $files);
 	}
 }

@@ -12,7 +12,9 @@ trait Handler
 	 */
 	public function mkDir($dir)
 	{
-		return mkdir(strtolower($dir), 755, true);
+		if (is_dir($dir)) return false;
+
+		return mkdir(strtolower($dir), 0644, true);
 	}
 
 	/**

@@ -14,7 +14,7 @@ class Project extends Base
 	 */
 	public function summon()
 	{
-		if ($this->has($this->project)) {
+		if ($this->exists($this->project)) {
 			throw new \Exception("There's a project with that name.", 1);
 		}
 

@@ -166,7 +166,12 @@ class Terminal
 		return true;
 	}
 
-	
+	/**
+	 * 
+	 * 
+	 * @param  [type] $args [description]
+	 * @return [type]       [description]
+	 */
 	private function parseArgs($args)
 	{
 		if ( ! isset($args[3]) ) return false;
