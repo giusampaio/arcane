@@ -50,7 +50,6 @@ class Load
 	public static function is_arcane($namespace, $class)
 	{
 		$directory = str_replace('Arcane\\', '', $namespace);
-
 		$directory = str_replace('\\', DS, $directory);
 
 		$class = ucfirst($class);
@@ -141,6 +140,8 @@ class Load
 		foreach (self::$prefix as $namespaceBase => $base) {
 
 			$fullPath = $base . DS . $file; 	
+
+			//print('Module '.$fullPath .'<br/>');
 
 			if ( is_file($fullPath) ) {
 		 		require_once($fullPath);

@@ -5,6 +5,7 @@ namespace Arcane\Console\Resource;
 use Arcane\Console\Resource\Base;
 use Arcane\Layers\View as Template;
 use Arcane\Console\Resource\Ui\Form;
+use Arcane\Console\Resource\Ui\Index;
 
 class View extends Base
 {
@@ -30,6 +31,7 @@ class View extends Base
 		$file = $path . DS . 'Layout.tpl';
 
 		$newPath = ROOT_PATH . DS . strtolower($this->project) . DS . 'starter' . DS . 'view';
+
 		$newFile = $newPath . DS . 'layout.tpl';
 
 		return copy($file, $newFile);
@@ -44,29 +46,31 @@ class View extends Base
 	{
 		$form = new Form();
 
-		echo $form->get($this->module, $this->args['up']);
+		$content = $form->get($this->module, $this->args['up']);
 
-		exit;
+		$file = $this->getFileName('form', 'view', 'tpl');
+
+		$this->fopenWrite($file, $content);
+
+		return $this;
 	}
 
 
 	/**
+	 * Index
 	 * 
-	 * 
-	 * @return array
+	 * @return boolean
 	 */
-	public function getUp()
+	public function index()
 	{
-		if (! isset($this->args['up'])) return null;
+		$index =  new Index();
 
-		$up = '';
+		$content = $index->get($this->module, $this->args['up']);
 
-		$vew = new Template();
+		$file = $this->getFileName('index', 'view', 'tpl');
 
-		foreach ($this->args['up'] as $arg) {
-			$up .= $this->getElementUi($arg);
-		}
-		
-		return $up;
+		$this->fopenWrite($file, $content);
+
+		return $this;
 	}
 }

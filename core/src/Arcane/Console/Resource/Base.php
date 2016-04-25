@@ -120,19 +120,21 @@ class Base
 	 * 
 	 * @return string
 	 */
-	public function getFileName($name, $type)
+	public function getFileName($name, $type, $ext = 'php')
 	{
+		$name = ($ext == 'php') ? ucfirst($name) : strtolower($name);
+
 		if (! isset($this->vendor) || $this->vendor == null) {
 
-			$file = '%s'. DS .'starter'. DS . $type . DS .'%s.php'; 
-			$file = sprintf($file, strtolower($this->project), ucfirst($name));
+			$file = '%s'. DS .'starter'. DS . $type . DS .'%s.'. $ext; 
+			$file = sprintf($file, strtolower($this->project), $name);
 			
 		} else {
 
 			$dir = 'modules' . DS . $this->vendor . DS . $this->module;
 
-			$file = '%s'. DS .'%s'. DS . '' . $type . DS .'%s.php'; 
-			$file = sprintf($file, strtolower($this->project), strtolower($dir), ucfirst($name));
+			$file = '%s'. DS .'%s'. DS . '' . $type . DS .'%s.' . $ext; 
+			$file = sprintf($file, strtolower($this->project), strtolower($dir), $name);
 		}
 
 		return $file;

@@ -2,7 +2,7 @@
 
 namespace {{namespace}};
 
-use Arcane\Layer\Model;
+use Arcane\Layers\Model;
 
 class {{nameModel}} extends Model
 {
@@ -17,7 +17,8 @@ class {{nameModel}} extends Model
 	 */
 	public function up()
 	{
-		return $this->schema->table('{{table}}'){{up}};
+		return $this->schema->table('{{table}}'){{up}}
+							->save();
 	}
 
 	/**

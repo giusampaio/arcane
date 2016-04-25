@@ -8,7 +8,7 @@ class Controller
 
 	private static $controllerDir;
 
-	private static $nameController;
+	private static $controllerName;
 
 	private static $projectName;
 
@@ -37,21 +37,21 @@ class Controller
 	 */
 	public function getPathFile($params)
 	{
-		@list($project, $module, $nameController) = explode('.', $params);
+		@list($project, $module, $controllerName) = explode('.', $params);
 
 		self::$projectName = $project;
 
 		$projectDir = strtolower($project) . DS;
 
-		if (strtolower($module)=='starter' || !isset($nameController)) {
+		if (strtolower($module)=='starter' || !isset($controllerName)) {
 			self::$controllerDir  = 'starter' . DS . 'controllers';	
-			self::$nameController = $module;
+			self::$controllerName = $module;
 		}  else {
 			self::$controllerDir = 'modules' . DS . ucfirst($module) . DS . 'controllers';	
-			self::$nameController = $nameController;
+			self::$controllerName = $controllerName;
 		}
 	
-		self::$nameController = ucfirst(self::$nameController);
+		self::$controllerName = ucfirst(self::$controllerName);
 
 		$projectDir . self::$controllerDir;
 		
@@ -59,7 +59,7 @@ class Controller
 
 		if ( ! is_dir($path) ) mkdir($path);
 
-		return $path . DS . self::$nameController .'.php';
+		return $path . DS . self::$controllerName .'.php';
 	}
 
 	/*
@@ -81,7 +81,7 @@ class Controller
 
 		$code = str_replace('{{namespace}}', $namespace, $code);
 		
-		$code = str_replace('{{nameController}}', ucfirst(self::$nameController), $code);
+		$code = str_replace('{{controllerName}}', ucfirst(self::$controllerName), $code);
 
 		fclose($content);
 

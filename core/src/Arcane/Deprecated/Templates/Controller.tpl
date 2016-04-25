@@ -4,7 +4,7 @@ namespace {{namespace}};
 
 use Controller;
 
-class {{nameController}} extends Controller
+class {{controllerName}} extends Controller
 {
 
 	/**

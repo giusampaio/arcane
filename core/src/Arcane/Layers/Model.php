@@ -28,6 +28,9 @@ class Model extends Eloquent
 	 */
 	public $timestamps  = false;
 
+
+	public $dbname;
+
 	/**
 	 * 
 	 */
@@ -38,6 +41,8 @@ class Model extends Eloquent
 		$this->schema = new Schema();
 		
 		$this->schema->setConnection($this->db);
+
+		$this->schema->setDatabaseName($this->dbname);
 	}
 
 	/**
@@ -60,7 +65,9 @@ class Model extends Eloquent
 		}
 
 		$driver = (array) $config->database;
- 		
+
+ 		$this->dbname = $config->database->database;	
+
 		$this->db = new Database();
 		$this->db->connect($driver);
 	}

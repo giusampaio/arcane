@@ -28,7 +28,9 @@ class Input extends UiBase
 
 		$obj = ['label' 	=> $name,
 				'required'  => false, 
-			   	'module'	=> $module];
+			   	'module'	=> $module,
+			   	'value'		=> '{{'.strtolower($name) .'}}',
+			   	'name'		=> strtolower($module) . "[$name]"];
 
 		return $tpl->render($obj);
 	}

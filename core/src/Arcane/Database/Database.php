@@ -1,12 +1,15 @@
 <?php
 
-namespace Arcane\Model;
+namespace Arcane\Database;
 
 use PDO;    
 use Illuminate\Database\Capsule\Manager as Capsule; 
 
 class Database extends Capsule
 {
+
+    use \Arcane\Traits\Debug;
+
     /**
      * [$pdo description]
      * @var [type]

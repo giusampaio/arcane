@@ -28,7 +28,9 @@ class Password  extends UiBase
 
 		$obj = ['label' 	=> $name,
 				'required'  => false, 
-			   	'module'	=> $module];
+			   	'module'	=> $module,
+			   	'field'		=> strtolower($name),
+			   	'name'		=> strtolower($module) . "[$name]"];
 
 		return $tpl->render($obj);
 	}

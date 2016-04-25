@@ -112,6 +112,7 @@ class Module extends Base
 				   	 ->setModule($this->module)
 				   	 ->setObject($this->module)
 				   	 ->setArgs($this->args)
-				   	 ->form();	
+				   	 ->form()
+				   	 ->index();	
 	}
 }

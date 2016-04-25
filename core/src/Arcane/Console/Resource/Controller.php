@@ -97,7 +97,9 @@ class Controller extends Base
 		
 		// args to send to handler replace on template
 		$vars = ['moduleNamespace'  => $moduleNamespace, 
-				 'actionNamespace'  => $action];
+				 'actionNamespace'  => $action,
+				 'controllerName'	=> $controllerName,
+				 'varName'			=> strtolower($controllerName)];
 		
 
 		$file = strtolower($this->project . DS . 'modules' . DS . 

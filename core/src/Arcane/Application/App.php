@@ -34,10 +34,8 @@ class App
 		$this->setConfig();
 
 		$starter = $this->starter();
-
 		$layout  = $starter->layout;
-
-		$view = $starter->view($layout);
+		$view    = $starter->view($layout);
 
 		echo $view->render($starter);		
 	}
@@ -48,13 +46,16 @@ class App
 	 */
 	public function setConsts()
 	{
-		$vendorDir = dirname(dirname(__FILE__));
+		define('DS', DIRECTORY_SEPARATOR);
 
-		$baseDir = dirname($vendorDir);
+		$vendorDir = dirname(dirname(__FILE__));
+		$baseDir   = dirname($vendorDir);
 
 		define('ARCANE_PATH', $vendorDir);
-		define('ROOT_PATH', realpath('.'));
-		define('DS', DIRECTORY_SEPARATOR);
+
+		$root = ($this->isVhost()) ? realpath('../') : realpath('.');
+
+		define('ROOT_PATH', $root);
 	}
 
 	/**
@@ -79,5 +80,18 @@ class App
 		$config  = fread($handler, filesize($file));
 
 		define('CONFIG', $config);
+	}
+
+	/**
+	 * Check if is running on the arcane virtual host
+	 */
+	private function isVhost()
+	{
+		$dir = getcwd();
+
+		$pieces = explode(DS, $dir);
+		$index  = count($pieces) - 1;
+
+		return ($pieces[$index] == 'public') ? true : false;
 	}
 }

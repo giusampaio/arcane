@@ -1,8 +1,8 @@
 <html>
   <head>
-    {{#loadCSS}}
+    {{#css}}
     <link rel="stylesheet" type="text/css" href="{{.}}" />
-    {{/loadCSS}}
+    {{/css}}
 
     {{#loadFonts}}
     <link rel="stylesheet" type="text/css" href="panel/starter/assets/{{.}}" />
@@ -11,8 +11,8 @@
 
   {{{getContent}}}
 
-  {{#loadJS}}
+  {{#js}}
   <script type="text/javascript" src="{{.}}"></script>
-  {{/loadJS}}
+  {{/js}}
 
 </html>

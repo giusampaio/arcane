@@ -30,26 +30,26 @@ class Migrate
 	 */
 	public function getPathFile($params)
 	{
-		@list($project, $module, $nameController) = explode('.', $params);
+		@list($project, $module, $controllerName) = explode('.', $params);
 
 		self::$projectName = $project;
 
 		$projectDir = strtolower($project) . DS;
 
-		if (strtolower($module)=='starter' || !isset($nameController)) {
+		if (strtolower($module)=='starter' || !isset($controllerName)) {
 			self::$controllerDir  = 'starter' . DS . 'controllers';	
-			self::$nameController = $module;
+			self::$controllerName = $module;
 		}  else {
 			self::$controllerDir = 'modules' . DS . ucfirst($module) . DS . 'controllers';	
-			self::$nameController = $nameController;
+			self::$controllerName = $controllerName;
 		}
 	
-		self::$nameController = ucfirst(self::$nameController);
+		self::$controllerName = ucfirst(self::$controllerName);
 
 		$projectDir . self::$controllerDir;
 		
 		$path = $projectDir . self::$controllerDir . DS;
 
-		return $path . DS . self::$nameController .'.php';
+		return $path . DS . self::$controllerName .'.php';
 	}
 }

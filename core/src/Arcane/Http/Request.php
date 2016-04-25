@@ -7,13 +7,21 @@ class Request
 	use \Arcane\Traits\Debug;
 
 	/**
+	 * 
+	 */
+	public function __construct()
+	{
+		$this->segment = $this->getSegmentIndex();
+	}
+
+	/**
 	 * Parse URL and try get the current project
 	 * 
 	 * @return string
 	 */
 	public function project()
 	{
-		return $this->parseUrl('project', 0);
+		return $this->parseUrl('project', $this->segment);
 	}
 
 	/**
@@ -23,7 +31,7 @@ class Request
 	 */
 	public function vendor()
 	{
-		return $this->parseUrl('vendor', 1);
+		return $this->parseUrl('vendor', $this->segment + 1);
 	}
 
 	/**
@@ -33,7 +41,7 @@ class Request
 	 */
 	public function module()
 	{
-		return $this->parseUrl('module', 2);
+		return $this->parseUrl('module',  $this->segment + 2);
 	}
 
 	/**
@@ -44,7 +52,7 @@ class Request
 	public function action()
 	{
 		try {
-			return $this->parseUrl('action', 4);
+			return $this->parseUrl('action', $this->segment + 3);
 		} catch (\Exception $e) {
 			return 'index';
 		}
@@ -74,5 +82,21 @@ class Request
 
 		throw new \Exception(ucfirst($item)." not found. $errExplain", 1);
 	}
+
+	/**
+	 * Used to identify subdirectory in document root
+	 */
+	protected function getSegmentIndex()
+	{
+		$script = $_SERVER['SCRIPT_NAME'];
+
+		$pieces = explode('/', $script);
+
+		unset($pieces[0]);
+
+		$index = array_search('public', $pieces) - 1;
+
+		return $index;
+	}	
 
 }

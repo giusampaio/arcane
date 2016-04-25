@@ -2,6 +2,9 @@
 
 namespace Arcane\Layers;
 
+use Arcane\Http\Get;
+use Arcane\Http\Post;
+use Arcane\Http\Router;
 use Arcane\Layers\View;
 use Arcane\Http\Request;
 
@@ -12,7 +15,11 @@ class Controller
 	use \Arcane\Traits\Resource;
 	use \Arcane\Traits\Directory;
 
-	protected $router;
+	protected static $get;
+
+	protected static $post;
+
+	protected static $router;
 
 	protected $assetsDir;
 
@@ -62,7 +69,6 @@ class Controller
 			return false; 
 		}
 
-		// 
 		$path = $this->absoluteDir() .'view';
 
 		// Get a view layer
@@ -83,7 +89,11 @@ class Controller
 		$this->assetsDir = $this->relativeDir() . 'assets';
 
 		foreach ($files as $file) {
+			
 			$path = str_replace('\\', '/', $this->assetsDir);
+
+			if (is_array($file)) continue;
+
 			$files[] =  $path . '/'. $type . $file;
 		}	
 
@@ -107,5 +117,47 @@ class Controller
 		} else {
 			return $this->currentModule();
 		}
+	}
+
+	/**
+	 * Post
+	 * 
+	 * @return Post Object
+	 */
+	public function post()
+	{
+		if (!isset(self::$post)) {
+			self::$post = new Post();
+		}	
+
+		return self::$post;
+	}
+
+	/**
+	 * get
+	 * 
+	 * @return get Object
+	 */
+	public function get()
+	{
+		if (!isset(self::$get)) {
+			self::$get = new get();
+		}	
+
+		return self::$get;
+	}
+
+	/**
+	 * Router
+	 * 
+	 * @return Router
+	 */
+	public function router()
+	{
+		if (!isset(self::$router)) {
+			self::$router = new Router();
+		}	
+
+		return self::$router;	
 	}
 }

@@ -64,7 +64,7 @@ class {{controllerName}} extends Controller
         $view = $this->view('form');
 
         if ( $this->post()->exists() ) {
-            return $this->save($id);
+            return $this->save();
         }
 
         return $view->render();    
@@ -80,7 +80,7 @@ class {{controllerName}} extends Controller
     {
         $view = $this->view('form');
 
-        $id = $this->get('id');
+        $id = $this->get()->item('id');
 
         if ( $this->post()->exists() ) {
             return $this->save($id);
@@ -106,17 +106,17 @@ class {{controllerName}} extends Controller
      * 
      * @return boolean
      */
-    protected function save($id)
+    protected function save($id = null)
     {   
         if ( ! $this->validate() ) {
             return $this->router()->back();
         }
 
-        $post = $this->post('{{varController}}');
+        $post = $this->post()->item('{{varController}}');
 
-        ${{varController}} = $this->model->find($id);
-
+        ${{varController}} = ($id == null) ? $this->model : $this->model->find($id);
         {{saveController}}
+            
         ${{varController}}->save();
 
         return $this->router()->go('/index');

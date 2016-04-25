@@ -17,7 +17,7 @@ trait Resource
 		$request = new Request();
 
 		// Get name of current project
-		$project = $request->project();
+		$project = ucfirst($request->project());
 
 		// Mount namespace
 		$namespace = "\\$project\\Starter\\Index";

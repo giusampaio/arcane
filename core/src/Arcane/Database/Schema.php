@@ -1,11 +1,15 @@
 <?php
 
-namespace Arcane\Model;
+namespace Arcane\Database;
 
-use Arcane\Model\Database;
+use Arcane\Database\Database;
 
 class Schema 
 {
+	use \Arcane\Traits\Debug;
+
+	private $dbname;
+
 	/**
 	 * Array fields 
 	 * @var array
@@ -22,7 +26,7 @@ class Schema
 	 * Engine 
 	 * @var string
 	 */
-	private $engine;
+	private $engine = 'InnoDB';
 
 	/**
 	 * @param  [type]
@@ -50,6 +54,12 @@ class Schema
 	public function setConnection($db)
 	{
 		$this->db = $db;
+	}
+
+
+	public function setDatabaseName($name)
+	{
+		$this->dbname = $name;
 	}
 
 	/**
@@ -81,7 +91,7 @@ class Schema
 	/*
 
 	*/
-	public function add()
+	public function alter()
 	{
 		$headerSQL = 'ALTER TABLE '. $this->table ;
 		$fieldSQL  = '';
@@ -90,10 +100,18 @@ class Schema
 			foreach ($fields as $i => $field) {
 				foreach ($field as $name) {
 					$type    = $this->getAliasField($type);
-					$command = $this->hasColumn();
+					
+					// Not alter id collumn fot while...
+					if ($name=='id') continue;
+
+					if ($this->hasColumn($this->table, $name)) {
+						$command = sprintf(' CHANGE COLUMN %s %s %s', $name, $name, $type);
+					}  else {
+						$command = sprintf(' ADD COLUMN %s %s', $name, $type);
+					}
 					
 					$fieldSQL .= (strlen($fieldSQL)) ? ', ': '';
-					$fieldSQL .= sprintf(' ADD COLUMN %s %s', $name, $type);
+					$fieldSQL .= $command;
 				}
 			}
 		}
@@ -104,14 +122,15 @@ class Schema
 	}
 
 	/**
-	 * 
+	 * List of alias to the collumn type
 	 * 
 	 * @param  [type]
 	 * @return [type]
 	 */
 	public function getAliasField($alias)
 	{
-		$list['string'] = 'varchar';
+		$list['string'] = 'varchar(50)';
+		$list['pk'] 	= 'int AUTO_INCREMENT PRIMARY KEY';
 
 		return (isset($list[$alias])) ? $list[$alias] : $alias;
 	}
@@ -121,9 +140,11 @@ class Schema
 	*/
 	public function save()
 	{
-		$sql = ($this->hasTable($this->table)) ? $this->add() : $this->create();
+		$sql = ($this->hasTable($this->table)) ? $this->alter() : $this->create();
 
-		$this->db->exec($sql);
+		$this->say($sql, true);
+
+		return $this->db->exec($sql);
 	}
 
 
@@ -136,7 +157,7 @@ class Schema
 		$values	= [':table' => $table];
 
 		$ret = $this->db->select($search, $values);
-		
+
 		return empty($ret) ? false : true;
 	}
 
@@ -150,11 +171,13 @@ class Schema
 						FROM INFORMATION_SCHEMA.COLUMNS 
 					WHERE 
 					    TABLE_SCHEMA = :database AND 
-						TABLE_NAME  = :table AND
-						COLUMN_NAME = :column ';
+						TABLE_NAME   = :table AND
+						COLUMN_NAME  = :column';
 
 
-		$values	= [':table' => $table, ':column' => $column, ':'];
+		$values	= [':table'    => $table, 
+				   ':column'   => $column,
+				   ':database' => $this->dbname];
 
 		$ret = $this->db->select($search, $values);
 		

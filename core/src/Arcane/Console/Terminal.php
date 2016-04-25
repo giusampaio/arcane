@@ -8,6 +8,7 @@ use Arcane\Application\App;
 class Terminal 
 {
 	use Traits\Message;
+	use \Arcane\Traits\Debug;
 
 	/**
 	 * Command require by console
@@ -62,6 +63,37 @@ class Terminal
 	 */
 	public function execute($args)
 	{
+
+
+		if (! isset($args[1]) ) {
+			echo 'Command not found';
+			return false;
+
+		} elseif (preg_match('#^summon:#', $args[1]) === 1) {
+			$this->summoner($args);
+		
+		} elseif ($args[1] == 'migrate')  {
+			$this->migrate($args);
+		}
+	}
+	
+	public function migrate($args)
+	{
+		$this->entity   = 'model';
+
+		$entity = $this->callEntity();
+
+		return $entity->setProject($args[2])
+			   		  ->migrate();
+	}
+
+	/**
+	 * Function to 
+	 * @return [type] [description]
+	 */
+	public function summoner($args)
+	{
+
 		// Verifica se tem a quantidade correta de paramêtros
 		if (count($args) < 2 ) {
 			return $this->error('Command Not found');

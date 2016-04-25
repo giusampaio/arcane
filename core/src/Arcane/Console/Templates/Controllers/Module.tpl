@@ -24,16 +24,18 @@ class Module extends Controller
 	 */
 	public function js()
 	{
-
+		return [];
 	}
 
 	/**
-	 * Return the content HTML of module 
+	 * Return the HTML content  of module 
 	 * 
 	 * @return string
 	 */
 	public function getContent()
 	{
-		
+		${{varName}} = new {{controllerName}}();
+
+		return ${{varName}}->actions();			
 	} 
 }
