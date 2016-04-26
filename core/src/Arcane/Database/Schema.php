@@ -142,8 +142,6 @@ class Schema
 	{
 		$sql = ($this->hasTable($this->table)) ? $this->alter() : $this->create();
 
-		$this->say($sql, true);
-
 		return $this->db->exec($sql);
 	}
 
@@ -153,8 +151,9 @@ class Schema
 	*/
 	public function hasTable($table)
 	{
-		$search = 'SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME =:table';
-		$values	= [':table' => $table];
+		$search = 'SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME =:table AND TABLE_SCHEMA = :database';
+		$values	= [':table' => $table, 
+				   ':database' => $this->dbname];
 
 		$ret = $this->db->select($search, $values);
 
