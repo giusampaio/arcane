@@ -6,9 +6,8 @@
               {{module}}s
               <small>
                    &nbsp; &nbsp; 
-                  <button class="btn btn-dark btn-xs" type="button">
-                    <i class="fa fa-bolt"></i>&nbsp;
-                    
+                  <button class="btn btn-dark btn-xs" type="button" onclick="go('{{url_create}}')">
+                    <i class="fa fa-bolt"></i>&nbsp;Add a new {{module}}                    
                   </button>
               </small>
           </h3>
@@ -76,3 +75,14 @@
       </div>
 </div>
 <!-- /page content -->
+
+
+<!-- index {{Module}} script-->
+<script type="text/javascript">
+
+function go(url) {
+  window.location.href = url;
+}
+
+</script>
+<!-- /index {{Module}} script-->

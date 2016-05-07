@@ -118,22 +118,25 @@ class Base
 	/**
 	 * Return file name to project 
 	 * 
+	 * @param  string $name 	File name
+	 * @param  string $type 	Folder where it lives
+	 * @param  string $ext  	Extension file
 	 * @return string
 	 */
-	public function getFileName($name, $type, $ext = 'php')
+	public function getFileName(string $name, string $folder, string $ext = 'php')
 	{
 		$name = ($ext == 'php') ? ucfirst($name) : strtolower($name);
 
 		if (! isset($this->vendor) || $this->vendor == null) {
 
-			$file = '%s'. DS .'starter'. DS . $type . DS .'%s.'. $ext; 
+			$file = '%s'. DS .'starter'. DS . $folder . DS .'%s.'. $ext; 
 			$file = sprintf($file, strtolower($this->project), $name);
 			
 		} else {
 
 			$dir = 'modules' . DS . $this->vendor . DS . $this->module;
 
-			$file = '%s'. DS .'%s'. DS . '' . $type . DS .'%s.' . $ext; 
+			$file = '%s'. DS .'%s'. DS . '' . $folder . DS .'%s.' . $ext; 
 			$file = sprintf($file, strtolower($this->project), strtolower($dir), $name);
 		}
 

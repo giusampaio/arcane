@@ -30,11 +30,11 @@ class Controller
 	 * @param  string $args   
 	 * @return mixed
 	 */
-	public function __call($method, $args)
+	/*public function __call($method, $args)
 	{
 		// Call method for events trait 	
-		return $this->listen($method, $args);
-	}
+	//	return $this->listen($method, $args);
+	}*/
 	
 
 	/**
@@ -42,7 +42,7 @@ class Controller
 	 * 
 	 * @return mixed
 	 */
-	protected function _actions()
+	protected function actions()
 	{
 		$req = new Request();
 
@@ -88,16 +88,18 @@ class Controller
 	{
 		$this->assetsDir = $this->relativeDir() . 'assets';
 
+		$includes = [];
+
 		foreach ($files as $file) {
 			
 			$path = str_replace('\\', '/', $this->assetsDir);
 
 			if (is_array($file)) continue;
 
-			$files[] =  $path . '/'. $type . $file;
+			$includes[] =  '/' . $path . '/'. $type . '/' . $file;
 		}	
 
-		return $files;
+		return $includes;
 	}
 
 	/**
@@ -108,12 +110,17 @@ class Controller
 	 */
 	public function module($module = null) 
 	{
-		if ($module == '*') {
+		if ($module === '*') {
 			return $this->allModules();
+
+		} elseif (strripos($module, '*')) {
+			$module = explode('\\', $module);
+			$type   = $module[0];  
+			return $this->allModules($type);
 
 		} elseif ($module != null) {
 			return $this->singleModule($module);
-		
+			
 		} else {
 			return $this->currentModule();
 		}

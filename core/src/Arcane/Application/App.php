@@ -81,17 +81,4 @@ class App
 
 		define('CONFIG', $config);
 	}
-
-	/**
-	 * Check if is running on the arcane virtual host
-	 */
-	private function isVhost()
-	{
-		$dir = getcwd();
-
-		$pieces = explode(DS, $dir);
-		$index  = count($pieces) - 1;
-
-		return ($pieces[$index] == 'public') ? true : false;
-	}
 }

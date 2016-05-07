@@ -14,6 +14,7 @@ class Console
 		Project::init($project);
 	}
 
+
 	/*
 		Cria o arquivo setup na raiz do projeto 
 	*/

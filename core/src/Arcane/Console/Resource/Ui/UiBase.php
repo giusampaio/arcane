@@ -46,4 +46,25 @@ class UiBase extends Base
 	{
 		$this->js;
 	}
+
+	/**
+	 * Return the url to route for a action
+	 * #WORKARROUND Colocar outros DocumentRoots aqui
+	 * 
+	 * @param  string $action 
+	 */
+	public function url(string $action)
+	{
+		$dir = getcwd();
+
+		$documentRoot = 'C:\xampp\htdocs\\';
+
+		$subdir = str_replace($documentRoot, '', $dir);
+
+		$base = $this->project . '/' . $this->vendor . '/' . $this->module;
+
+		$url = strtolower('/' . $subdir . '/' . $base . '/' . $action);
+
+		return $url;
+	}
 }

@@ -4,6 +4,8 @@ namespace Arcane\Http;
 
 class Get
 {
+	use \Arcane\Traits\Debug;
+
 	/**
 	 * 
 	 */
@@ -17,10 +19,10 @@ class Get
 	 * @param  [type] $index [description]
 	 * @return [type]        [description]
 	 */
-	public function item($index)
+	public function segment($index)
 	{
-		$item = $this->data[$index] ?? null;
+		$args =  explode('/', $this->data['q']);
 
-		return $item;
+		return (isset($args[$index])) ? $args[$index] : null;
 	}
 }

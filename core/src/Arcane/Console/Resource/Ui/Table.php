@@ -8,10 +8,14 @@ use Arcane\Console\Resource\Ui\UiBase;
 class Table extends UiBase
 {
 	/**
-	 * Set template dir for the Form 
+	 * Set template dir for the Index 
 	 */
-	public function __construct()
+	public function __construct(string $project, string $vendor, string $module)
 	{
+		$this->project = $project;
+		$this->vendor  = $vendor;
+		$this->module  = $module;
+
 		parent::__construct();
 	}
 
@@ -20,13 +24,13 @@ class Table extends UiBase
 	 * 
 	 * @return boolean
 	 */
-	public function get(string $module, array $fields)
+	public function get(array $fields)
 	{
 		$view = new Template();
 
 		$tpl = $view->path($this->path)->get('Admin/Table');
 
-		$placeholders = $this->getPlaceholders($module, $fields);
+		$placeholders = $this->getPlaceholders($this->module, $fields);
 
 		return $tpl->render($placeholders);
 	}
@@ -56,6 +60,9 @@ class Table extends UiBase
 		$obj = ['collumns' 	  => $collumns,
 				'module_init' => '{{#'. $module .'}}',
 				'module_end'  => '{{/'. $module .'}}',
+				'view'	  	  => $this->url('show/{{id}}'),
+				'edit'		  => $this->url('edit/{{id}}'),
+				'remove'	  => $this->url('remove/{{id}}'),   
 				'rows' 	   	  => $rows];
 
 		return $obj;

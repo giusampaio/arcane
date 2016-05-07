@@ -6,6 +6,8 @@ use Arcane\Layers\Model;
 
 class {{nameModel}} extends Model
 {
+	protected $table = '{{table}}';
+
 	public function __construct()
 	{
 		parent::__construct();

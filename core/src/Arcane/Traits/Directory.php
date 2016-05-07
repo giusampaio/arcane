@@ -15,6 +15,11 @@ trait Directory
 		$class  = get_class($this);
 		$pieces = explode('\\', $class);
 
+		if (end($pieces) == 'Module') {
+			$project = array_shift($pieces);
+			$pieces  = array_merge([$project], ['modules'], $pieces);
+		} 
+			
 		$dir = strtolower(implode('/', $pieces));
 
 		return dirname($dir) . DS;

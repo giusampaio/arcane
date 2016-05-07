@@ -47,11 +47,34 @@ class {{controllerName}} extends Controller
     {
         $view = $this->view('show');
         
-        $id = $this->get('id');
+        $id = $this->get()->segment(4);
 
         ${{varController}} = $this->model->find($id);
 
-        return $view->render(${{varController}}); 
+        $attr = $this->placeholders('{{varController}}', ${{varController}});
+
+        return $view->render($attr); 
+    }
+
+        /**
+     * Prepare the placeholder object to send to the Show View
+     * 
+     * @param  string $index 
+     * @param  object $obj   
+     * @return array
+     */
+    public function placeholders($index, $obj)
+    {
+        $tmp = $obj->getAttributes();
+
+        foreach ($tmp as $key => $value) {
+            $attr[] = ['key' => $key, 'value' => $value];
+        }
+
+        $placeholder[$index] = $obj;
+        $placeholder['attr'] = $attr;
+
+        return $placeholder;
     }
 
 	/**
@@ -80,7 +103,7 @@ class {{controllerName}} extends Controller
     {
         $view = $this->view('form');
 
-        $id = $this->get()->item('id');
+        $id = $this->get()->segment(4);
 
         if ( $this->post()->exists() ) {
             return $this->save($id);

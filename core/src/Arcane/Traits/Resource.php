@@ -26,6 +26,19 @@ trait Resource
 		return new $namespace();
 	}
 
+	/**
+	 * Check if is running on the arcane virtual host
+	 */
+	public function isVhost()
+	{
+		$dir = getcwd();
+
+		$pieces = explode(DS, $dir);
+		$index  = count($pieces) - 1;
+
+		return ($pieces[$index] == 'public') ? true : false;
+	}
+
 
 	/**
 	 * Return a object module given a name
@@ -72,7 +85,7 @@ trait Resource
 	 * 
 	 * @return array
 	 */
-	public function allModules()
+	public function allModules(string $type = null)
 	{
 		$objs = [];
 
@@ -88,11 +101,14 @@ trait Resource
 
 			$modules = scandir($pathProject . DS . $vendor);
 			
+			if ($type != null && strtolower($type) != $vendor) continue;
+
 			foreach ($modules as $module) {
 				
 				if ($module == '.' || $module == '..') continue;
 				
 				$namespace = ucfirst($vendor) .'\\'. ucfirst($module);
+
 			
 				$objs[] = $this->singleModule($namespace);		
 			}
