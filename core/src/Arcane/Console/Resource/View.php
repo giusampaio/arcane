@@ -45,9 +45,9 @@ class View extends Base
 	 */
 	public function form()
 	{
-		$form = new Form();
+		$form = new Form($this->project, $this->vendor, $this->module);
 
-		$content = $form->get($this->module, $this->args['up']);
+		$content = $form->get($this->args['up']);
 
 		$file = $this->getFileName('form', 'view', 'tpl');
 

@@ -5,16 +5,29 @@ namespace Arcane\Console\Resource\Ui;
 use Arcane\Layers\View as Template;
 use Arcane\Console\Resource\Base;
 
-class Form extends Base
+class Form extends UiBase
 {
 	use \Arcane\Traits\Directory;
 
 	/**
-	 * Set template dir for the Form 
+	 * Name of the project
+	 * @var [type]
 	 */
-	public function __construct()
+	protected $project;
+
+
+	protected $vendor;
+
+	/**
+	 * Set template dir for the Index 
+	 */
+	public function __construct(string $project, string $vendor, string $module)
 	{
-		$this->path  = $this->getTemplateDir() . DS . 'Views';
+		$this->project = $project;
+		$this->vendor  = $vendor;
+		$this->module  = $module;
+
+		parent::__construct();
 	}
 
 	/**
@@ -22,21 +35,20 @@ class Form extends Base
 	 * 
 	 * @return boolean
 	 */
-	public function get(string $module, array $fields)
+	public function get(array $fields)
 	{
 		$view = new Template();
 
 		$tpl = $view->path($this->path)->get('Admin/Form');
 
-		$this->module = $module;
-
-		$title    = 'New '. $module;
-		$subtitle = 'Create or edit a '. $module;
+		$title    = 'New '. $this->module;
+		$subtitle = 'Create or edit a '. $this->module;
 		$fields   = $this->getFields($fields);
 
 		$obj = ['title'    => $title,
 				'subtitle' => $subtitle,
 				'fields'   => $fields, 
+				'back'	   => $this->url('index'),
 			   	'options'  => true];
 
 		return $tpl->render($obj);

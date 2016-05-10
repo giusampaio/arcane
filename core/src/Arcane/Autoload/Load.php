@@ -93,6 +93,10 @@ class Load
 		if ( self::autoloadModule($class) == true ) {
 			return true;
 		}
+
+		if ( self::autoloadProjectModule($class) == true ) {
+			return true;
+		}
 	}
 
 	private static function autoloadStarter($class) 
@@ -132,6 +136,37 @@ class Load
 		$class   = ucfirst(array_pop($namespace)) . '.php';
 		$project = array_shift($namespace);
 		$path    = $project .'\\modules\\'. implode('\\', $namespace);
+
+		// Mount file name and path name
+		$path = strtolower($path);
+		$file = $path . DS . $class;
+		
+		foreach (self::$prefix as $namespaceBase => $base) {
+
+			$fullPath = $base . DS . $file; 	
+
+			//print('Module '.$fullPath .'<br/>');
+
+			if ( is_file($fullPath) ) {
+		 		require_once($fullPath);
+		 		return true;
+			} 	 	
+		}
+
+		return false;
+	}
+
+
+	private static function autoloadProjectModule($class) 
+	{
+		// Dismember namespace
+		$namespace = explode('\\', $class);
+
+		if (! isset($namespace[1]) || $namespace[1] == 'Starter') return false;
+
+		// Get only name class adding .php
+		$class   = ucfirst(array_pop($namespace)) . '.php';
+		$path    = 'project\\modules\\'. implode('\\', $namespace);
 
 		// Mount file name and path name
 		$path = strtolower($path);

@@ -143,7 +143,16 @@ class {{controllerName}} extends Controller
         ${{varController}}->save();
 
         return $this->router()->go('/index');
-    }	
+    }   
+
+    public function remove()
+    {        
+        $id = $this->get()->segment(4);
+
+        $msg = ($this->delete($id) == true) ? 'Removed successful' : 'Failed to remove item';
+
+        return $this->router()->go('/index');
+    }
 
     /**
      * Function to delete a {{controllerName}}

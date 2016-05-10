@@ -62,7 +62,8 @@ class Table extends UiBase
 				'module_end'  => '{{/'. $module .'}}',
 				'view'	  	  => $this->url('show/{{id}}'),
 				'edit'		  => $this->url('edit/{{id}}'),
-				'remove'	  => $this->url('remove/{{id}}'),   
+				'remove'	  => $this->url('remove/{{id}}'),
+				'id'		  => '{{id}}',   
 				'rows' 	   	  => $rows];
 
 		return $obj;
